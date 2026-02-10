@@ -3,17 +3,43 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import RegistrationForm from '@/components/registration/RegistrationForm';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Trophy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useEventSlot } from '@/contexts/EventSlotContext';
+import { cn } from '@/lib/utils';
 
 // Chargez votre clé publique Stripe
 // IMPORTANT: Remplacez cette valeur par votre clé publique Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_YOUR_KEY_HERE');
 
+const typeStyles = {
+  king: {
+    bg: 'bg-racing-yellow/10',
+    border: 'border-racing-yellow/30',
+    text: 'text-racing-yellow',
+  },
+  queen: {
+    bg: 'bg-racing-purple/10',
+    border: 'border-racing-purple/30',
+    text: 'text-racing-purple',
+  },
+  electric: {
+    bg: 'bg-racing-blue/10',
+    border: 'border-racing-blue/30',
+    text: 'text-racing-blue',
+  },
+  mixte: {
+    bg: 'bg-racing-red/10',
+    border: 'border-racing-red/30',
+    text: 'text-racing-red',
+  },
+};
+
 const Registration = () => {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState('');
+  const { selectedSlot } = useEventSlot();
 
   useEffect(() => {
     // Créer un PaymentIntent dès que la page se charge
@@ -100,11 +126,78 @@ const Registration = () => {
           </p>
         </motion.div>
 
-        {/* Formulaire d'inscription */}
+        {/* Créneau sélectionné ou message d'info */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-2xl mx-auto mb-6"
+        >
+          {selectedSlot ? (
+            <div className={cn(
+              'rounded-lg border p-6 backdrop-blur-sm',
+              typeStyles[selectedSlot.type].bg,
+              typeStyles[selectedSlot.type].border
+            )}>
+              <div className="flex items-center gap-2 mb-4">
+                <Trophy className={cn('h-5 w-5', typeStyles[selectedSlot.type].text)} />
+                <h2 className="text-xl font-semibold text-foreground">Créneau sélectionné</h2>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">{selectedSlot.date}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">{selectedSlot.time}</span>
+                </div>
+                <div className={cn(
+                  'inline-block rounded-full px-3 py-1 text-sm font-bold uppercase',
+                  typeStyles[selectedSlot.type].text,
+                  typeStyles[selectedSlot.type].bg
+                )}>
+                  {selectedSlot.title}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-6 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <Calendar className="h-5 w-5 text-orange-400 mt-0.5" />
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Aucun créneau sélectionné</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Vous pouvez vous inscrire maintenant et choisir votre créneau plus tard, ou retourner au planning pour sélectionner une date.
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const planningSection = document.getElementById('planning');
+                      if (planningSection) {
+                        navigate('/');
+                        setTimeout(() => {
+                          const elem = document.getElementById('planning');
+                          elem?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                      }
+                    }}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                  >
+                    Choisir un créneau
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Formulaire d'inscription */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: selectedSlot ? 0.4 : 0.2 }}
           className="max-w-2xl mx-auto"
         >
           <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">

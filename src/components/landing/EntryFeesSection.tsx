@@ -4,7 +4,6 @@ import { Ticket, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SectionTitle from './SectionTitle';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
-import { useNavigate } from 'react-router-dom';
 import jerseyBlackNight from '@/assets/jersey-black-night.png';
 import jerseyYellowThunder from '@/assets/jersey-yellow-thunder.png';
 import jerseyWhiteSky from '@/assets/jersey-white-sky.png';
@@ -131,8 +130,14 @@ const JerseyCard = ({ image, glowColor, teamName }: JerseyCardProps) => {
 };
 
 const MainCard = () => {
-  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleInscription = () => {
+    const planningSection = document.getElementById('planning');
+    if (planningSection) {
+      planningSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <motion.div
@@ -200,7 +205,7 @@ const MainCard = () => {
         <Button
           size="lg"
           className="mt-2 md:mt-4 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold text-sm md:text-lg px-6 py-4 md:px-8 md:py-6 rounded-xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300"
-          onClick={() => navigate('/inscription')}
+          onClick={handleInscription}
           style={{
             textShadow: '0 2px 4px rgba(0,0,0,0.3)',
           }}

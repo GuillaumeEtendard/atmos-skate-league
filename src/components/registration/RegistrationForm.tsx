@@ -7,18 +7,28 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useEventSlot } from '@/contexts/EventSlotContext';
 
 const RegistrationForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
+  const { selectedSlot } = useEventSlot();
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -28,7 +38,7 @@ const RegistrationForm = () => {
     }
 
     // Validation basique
-    if (!email || !name) {
+    if (!email || !name || !phone || !gender) {
       toast({
         title: 'Erreur',
         description: 'Veuillez remplir tous les champs obligatoires',
@@ -41,10 +51,19 @@ const RegistrationForm = () => {
 
     try {
       // Confirmer le paiement
+      const returnUrl = new URL(`${window.location.origin}/confirmation`);
+      if (selectedSlot) {
+        returnUrl.searchParams.set('event_id', selectedSlot.id);
+      }
+      returnUrl.searchParams.set('name', name);
+      returnUrl.searchParams.set('email', email);
+      returnUrl.searchParams.set('phone', phone);
+      returnUrl.searchParams.set('gender', gender);
+
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/confirmation`,
+          return_url: returnUrl.toString(),
           receipt_email: email,
           payment_method_data: {
             billing_details: {
@@ -107,15 +126,29 @@ const RegistrationForm = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="phone">Téléphone</Label>
+          <Label htmlFor="phone">Téléphone *</Label>
           <Input
             id="phone"
             type="tel"
             placeholder="+33 6 12 34 56 78"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            required
             className="bg-background/50"
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="gender">Sexe *</Label>
+          <Select value={gender} onValueChange={setGender} required>
+            <SelectTrigger className="bg-background/50">
+              <SelectValue placeholder="Sélectionnez votre sexe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">Homme</SelectItem>
+              <SelectItem value="female">Femme</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -131,10 +164,10 @@ const RegistrationForm = () => {
       <div className="border-t border-border pt-4">
         <div className="flex justify-between items-center mb-4">
           <span className="text-lg font-semibold">Total à payer</span>
-          <span className="text-2xl font-bold text-[#ffd600]">20,00 €</span>
+          <span className="text-2xl font-bold text-[#ffd600]">35,00 €</span>
         </div>
         <p className="text-sm text-muted-foreground">
-          Frais d'inscription à la ligue Atmos Skate League
+          Frais d'inscription à la ligue Atmos Skate League (includes jersey worth 35€)
         </p>
       </div>
 

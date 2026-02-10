@@ -12,22 +12,67 @@ const Confirmation = () => {
   useEffect(() => {
     const paymentIntent = searchParams.get('payment_intent');
     const redirectStatus = searchParams.get('redirect_status');
+    const name = searchParams.get('name');
+    const email = searchParams.get('email');
+    const phone = searchParams.get('phone');
+    const gender = searchParams.get('gender');
+    const eventId = searchParams.get('event_id');
 
     if (!paymentIntent) {
       setStatus('error');
       return;
     }
 
+    // Vérifier que les champs requis sont présents
+    if (!name || !email || !phone || !gender) {
+      console.error('Missing required fields in URL params');
+      setStatus('error');
+      return;
+    }
+
     // Vérifier le statut du paiement
     if (redirectStatus === 'succeeded') {
-      setStatus('success');
+      // Vérifier si déjà traité (éviter les doubles soumissions)
+      const registrationKey = `registration_${paymentIntent}`;
+      if (sessionStorage.getItem(registrationKey)) {
+        setStatus('success');
+        return;
+      }
 
-      // Vous pouvez envoyer les informations à votre backend ici
-      // pour enregistrer l'inscription dans votre base de données
-      // fetch('/api/register-participant', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ paymentIntent }),
-      // });
+      // Enregistrer le participant dans la base de données
+      fetch('/api/register-participant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paymentIntent,
+          name,
+          email,
+          phone,
+          gender,
+          eventId,
+        }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            // Si c'est une duplication (409), c'est OK - le participant est déjà enregistré
+            if (res.status === 409) {
+              sessionStorage.setItem(registrationKey, 'true');
+              setStatus('success');
+              return;
+            }
+            throw new Error('Failed to register participant');
+          }
+          return res.json();
+        })
+        .then(() => {
+          sessionStorage.setItem(registrationKey, 'true');
+          setStatus('success');
+        })
+        .catch((error) => {
+          console.error('Error registering participant:', error);
+          // Important: afficher une erreur si l'enregistrement échoue
+          setStatus('error');
+        });
     } else {
       setStatus('error');
     }

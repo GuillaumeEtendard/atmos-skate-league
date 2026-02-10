@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const SloganCTA = () => {
-  const navigate = useNavigate();
-
   const handleInscription = () => {
-    navigate('/inscription');
+    const planningSection = document.getElementById('planning');
+    if (planningSection) {
+      planningSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   // Electric flicker animation - gentler, less jarring

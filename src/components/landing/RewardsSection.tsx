@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import SectionTitle from './SectionTitle';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
-import { useNavigate } from 'react-router-dom';
 import rollerPrizeGold from '@/assets/roller-prize.png';
 import cinnarollPrize from '@/assets/cinnaroll-prize.png';
 import smileWorldPrize from '@/assets/smile-world-prize.png';
@@ -27,10 +26,17 @@ const rewards = [{
   image: smileWorldPrize
 }];
 const RewardsSection = () => {
-  const navigate = useNavigate();
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const drag = useDragScroll(sliderRef);
+
+  const handleInscription = () => {
+    const planningSection = document.getElementById('planning');
+    if (planningSection) {
+      planningSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const scrollToSlide = (index: number) => {
     if (!sliderRef.current) return;
     const cardWidth = 340;
@@ -190,7 +196,7 @@ const RewardsSection = () => {
           <Button
             size="lg"
             className="btn-gradient-yellow rounded-full px-10 py-6 text-lg font-bold uppercase tracking-wide"
-            onClick={() => navigate('/inscription')}
+            onClick={handleInscription}
           >
             <Ticket className="w-5 h-5 mr-2" />
             Je m'inscris !

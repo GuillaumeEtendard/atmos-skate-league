@@ -1,8 +1,11 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useEventSlot } from '@/contexts/EventSlotContext';
 
 interface PlanningCardProps {
+  id: string;
   date: string;
   time: string;
   title: string;
@@ -42,12 +45,19 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ date, time, title, type, spotsRemaining, totalSpots }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
+  const navigate = useNavigate();
+  const { setSelectedSlot } = useEventSlot();
 
   const styles = typeStyles[type];
+
+  const handleRegistration = () => {
+    setSelectedSlot({ id, date, time, title, type });
+    navigate('/inscription');
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -132,6 +142,7 @@ const PlanningCard = ({ date, time, title, type, spotsRemaining, totalSpots }: P
             size="sm"
             className="w-full border-racing-yellow/50 text-racing-yellow hover:bg-racing-yellow/10"
             disabled={spotsRemaining === 0}
+            onClick={handleRegistration}
           >
             {spotsRemaining === 0 ? 'COMPLET' : 'INSCRIPTION'}
           </Button>

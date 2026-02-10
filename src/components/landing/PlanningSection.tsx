@@ -5,12 +5,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
 
 const events = [
-  { date: 'Samedi 14 mars', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
-  { date: 'Samedi 28 mars', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
-  { date: 'Samedi 11 avril', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
-  { date: 'Samedi 25 avril', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
-  { date: 'Samedi 9 mai', time: '19h30 / 21h30', title: 'Électrique', type: 'electric' as const, spotsRemaining: 20, totalSpots: 20 },
-  { date: 'Samedi 23 mai', time: '19h30 / 21h30', title: 'Mixte', type: 'mixte' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'king-14-mars', date: 'Samedi 14 mars', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'queen-28-mars', date: 'Samedi 28 mars', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'king-11-avril', date: 'Samedi 11 avril', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'queen-25-avril', date: 'Samedi 25 avril', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'electric-9-mai', date: 'Samedi 9 mai', time: '19h30 / 21h30', title: 'Électrique', type: 'electric' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'mixte-23-mai', date: 'Samedi 23 mai', time: '19h30 / 21h30', title: 'Mixte', type: 'mixte' as const, spotsRemaining: 20, totalSpots: 20 },
 ];
 
 const PlanningSection = () => {
@@ -46,7 +46,7 @@ const PlanningSection = () => {
   };
 
   return (
-    <section className="section-container texture-overlay relative py-20 md:py-28">
+    <section id="planning" className="section-container texture-overlay relative py-20 md:py-28">
       <div className="relative z-10 mx-auto max-w-7xl">
         <SectionTitle>PLANNING</SectionTitle>
 
@@ -64,8 +64,8 @@ const PlanningSection = () => {
             className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
-            {events.map((event, index) => (
-              <div key={index} className="min-w-[280px] flex-shrink-0 snap-center">
+            {events.map((event) => (
+              <div key={event.id} className="min-w-[280px] flex-shrink-0 snap-center">
                 <PlanningCard {...event} />
               </div>
             ))}
@@ -92,8 +92,8 @@ const PlanningSection = () => {
 
           {/* Desktop Grid */}
           <div className="hidden md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-            {events.map((event, index) => (
-              <div key={index}>
+            {events.map((event) => (
+              <div key={event.id}>
                 <PlanningCard {...event} />
               </div>
             ))}
