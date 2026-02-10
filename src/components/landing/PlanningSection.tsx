@@ -61,7 +61,7 @@ const PlanningSection = () => {
             onPointerUp={drag.onPointerUp}
             onPointerCancel={drag.onPointerCancel}
             onPointerLeave={drag.onPointerLeave}
-            className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 touch-pan-x cursor-grab select-none active:cursor-grabbing"
+            className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
             {events.map((event, index) => (

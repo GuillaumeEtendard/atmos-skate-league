@@ -4,6 +4,7 @@ import { Ticket, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SectionTitle from './SectionTitle';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
+import { useNavigate } from 'react-router-dom';
 import jerseyBlackNight from '@/assets/jersey-black-night.png';
 import jerseyYellowThunder from '@/assets/jersey-yellow-thunder.png';
 import jerseyWhiteSky from '@/assets/jersey-white-sky.png';
@@ -130,8 +131,9 @@ const JerseyCard = ({ image, glowColor, teamName }: JerseyCardProps) => {
 };
 
 const MainCard = () => {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -195,9 +197,10 @@ const MainCard = () => {
           Repartez avec le <span className="font-bold text-[#ffd600]">maillot de votre choix</span> d'une valeur de 35 €. <span className="font-semibold text-foreground">Simple et gagnant !</span>
         </p>
         
-        <Button 
+        <Button
           size="lg"
           className="mt-2 md:mt-4 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold text-sm md:text-lg px-6 py-4 md:px-8 md:py-6 rounded-xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300"
+          onClick={() => navigate('/inscription')}
           style={{
             textShadow: '0 2px 4px rgba(0,0,0,0.3)',
           }}
@@ -278,7 +281,7 @@ const EntryFeesSection = () => {
           onPointerUp={drag.onPointerUp}
           onPointerCancel={drag.onPointerCancel}
           onPointerLeave={drag.onPointerLeave}
-          className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 touch-pan-x cursor-grab select-none active:cursor-grabbing"
+          className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {jerseys.map((jersey, index) => (

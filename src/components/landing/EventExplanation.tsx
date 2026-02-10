@@ -237,7 +237,7 @@ const EventExplanation = () => {
         </div>
 
         {/* Format Cards - Mobile Slider / Desktop Grid */}
-        <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory touch-pan-x cursor-grab select-none active:cursor-grabbing" style={{
+        <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory cursor-grab select-none active:cursor-grabbing" style={{
         WebkitOverflowScrolling: 'touch'
       }}>
           {/* Block 1: King of the Road */}

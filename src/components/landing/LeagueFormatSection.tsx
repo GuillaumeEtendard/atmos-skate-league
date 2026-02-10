@@ -156,7 +156,7 @@ const LeagueFormatSection = () => {
           onPointerUp={drag.onPointerUp}
           onPointerCancel={drag.onPointerCancel}
           onPointerLeave={drag.onPointerLeave}
-          className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory touch-pan-x cursor-grab select-none active:cursor-grabbing"
+          className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory cursor-grab select-none active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {slides.map((slide, idx) => {

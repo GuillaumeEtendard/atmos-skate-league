@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import SectionTitle from './SectionTitle';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
+import { useNavigate } from 'react-router-dom';
 import rollerPrizeGold from '@/assets/roller-prize.png';
 import cinnarollPrize from '@/assets/cinnaroll-prize.png';
 import smileWorldPrize from '@/assets/smile-world-prize.png';
@@ -26,6 +27,7 @@ const rewards = [{
   image: smileWorldPrize
 }];
 const RewardsSection = () => {
+  const navigate = useNavigate();
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const drag = useDragScroll(sliderRef);
@@ -147,7 +149,7 @@ const RewardsSection = () => {
         {/* Slider Container */}
         <div className="relative">
           {/* Cards Slider */}
-          <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-visible px-4 pt-16 pb-4 md:justify-center md:overflow-visible md:pt-0 touch-pan-x cursor-grab select-none active:cursor-grabbing" style={{
+          <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-visible px-4 pt-16 pb-4 md:justify-center md:overflow-visible md:pt-0 cursor-grab select-none active:cursor-grabbing" style={{
           WebkitOverflowScrolling: 'touch'
         }}>
             {rewards.map((reward, index) => <div key={reward.title} className="snap-center flex-shrink-0">
@@ -185,9 +187,10 @@ const RewardsSection = () => {
 
         {/* CTA Button */}
         <div className="mt-12 text-center">
-          <Button 
+          <Button
             size="lg"
             className="btn-gradient-yellow rounded-full px-10 py-6 text-lg font-bold uppercase tracking-wide"
+            onClick={() => navigate('/inscription')}
           >
             <Ticket className="w-5 h-5 mr-2" />
             Je m'inscris !

@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const SloganCTA = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const navigate = useNavigate();
+
+  const handleInscription = () => {
+    navigate('/inscription');
   };
 
   // Electric flicker animation - gentler, less jarring
@@ -220,7 +223,7 @@ const SloganCTA = () => {
           <Button
             size="lg"
             className="rounded-full px-10 py-6 text-lg border-2 border-[#ffd600] text-[#ffd600] bg-transparent font-semibold uppercase tracking-wide transition-all hover:bg-[#ffd600]/10 hover:shadow-[0_0_30px_-5px_#ffd600]"
-            onClick={scrollToTop}
+            onClick={handleInscription}
           >
             REJOINS LA COURSE
           </Button>
