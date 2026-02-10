@@ -42,7 +42,7 @@ const HeroVideo = () => {
             transition: 'opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)',
           }}
         >
-          <img alt="King of the Road" className="h-32 w-auto drop-shadow-2xl md:h-44 lg:h-52" src="/lovable-uploads/3e08aa7c-2882-4c9e-aba3-b9d830611a35.png" />
+          <img alt="King of the Road" className="h-32 w-auto drop-shadow-2xl md:h-44 lg:h-52" src="/atmos-uploads/3e08aa7c-2882-4c9e-aba3-b9d830611a35.png" />
         </div>
 
         {/* Title */}
