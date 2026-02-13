@@ -85,8 +85,6 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
     <div
       ref={cardRef}
       className="card-3d group min-w-[260px] md:min-w-0"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       style={{ perspective: '1000px' }}
     >
       <div
@@ -100,8 +98,8 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
           transformStyle: 'preserve-3d',
         }}
         >
-          {/* Background Gradient */}
-          <div className={cn('absolute inset-0 bg-gradient-to-t opacity-50', styles.gradient)} />
+          {/* Background Gradient - pointer-events-none pour laisser les clics au contenu */}
+          <div className={cn('absolute inset-0 pointer-events-none bg-gradient-to-t opacity-50', styles.gradient)} />
 
           {/* Floating particles effect at bottom */}
           <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden pointer-events-none">
@@ -112,8 +110,8 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
             <div className={cn('absolute bottom-3 left-1/2 w-1 h-1 rounded-full animate-float', type === 'king' ? 'bg-racing-yellow/45' : type === 'queen' ? 'bg-racing-purple/45' : type === 'electric' ? 'bg-racing-blue/45' : 'bg-racing-red/45')} style={{ animationDelay: '2s' }} />
           </div>
 
-          {/* Content */}
-        <div className="relative z-10">
+          {/* Content - z-20 et isolation pour être au-dessus du dégradé dans le contexte 3D */}
+        <div className="relative z-20 isolate">
           {/* Type Badge */}
           <div className={cn('mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold uppercase', styles.badge)}>
             {title}
@@ -136,13 +134,14 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
             </span>
           </div>
 
-          {/* CTA */}
+          {/* CTA - onMouseEnter annule le tilt pour que le clic soit fiable sur desktop */}
           <Button
             variant="outline"
             size="sm"
-            className="w-full border-racing-yellow/50 text-racing-yellow hover:bg-racing-yellow/10"
+            className="relative z-20 w-full cursor-pointer border-racing-yellow/50 text-racing-yellow hover:bg-racing-yellow/10"
             disabled={spotsRemaining === 0}
             onClick={handleRegistration}
+            onMouseEnter={handleMouseLeave}
           >
             {spotsRemaining === 0 ? 'COMPLET' : 'INSCRIPTION'}
           </Button>
