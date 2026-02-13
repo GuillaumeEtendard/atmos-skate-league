@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import HeroVideo from '@/components/landing/HeroVideo';
 import LeagueFormatSection from '@/components/landing/LeagueFormatSection';
-
 import EventExplanation from '@/components/landing/EventExplanation';
 import HighlightsSection from '@/components/landing/HighlightsSection';
 import RewardsSection from '@/components/landing/RewardsSection';
@@ -14,6 +14,15 @@ import LocationSection from '@/components/landing/LocationSection';
 import CommunitySection from '@/components/landing/CommunitySection';
 
 const Index = () => {
+  // Scroll vers la section planning quand on arrive depuis l'inscription avec #planning
+  useEffect(() => {
+    if (window.location.hash !== '#planning') return;
+    const t = setTimeout(() => {
+      document.getElementById('planning')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background relative">
       {/* Global Dynamic Background */}

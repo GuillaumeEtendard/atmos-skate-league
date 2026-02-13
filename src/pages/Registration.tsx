@@ -38,7 +38,7 @@ const typeStyles = {
 
 const Registration = () => {
   const navigate = useNavigate();
-  const [clientSecret, setClientSecret] = useState('pi_3T0RxoAPiX9Fxyws3BfezTtm_secret_hVnRTG9rW2tfijq3WwvbtQFp0');
+  const [clientSecret, setClientSecret] = useState('');
   const { selectedSlot } = useEventSlot();
 
   useEffect(() => {
@@ -173,16 +173,7 @@ const Registration = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      const planningSection = document.getElementById('planning');
-                      if (planningSection) {
-                        navigate('/');
-                        setTimeout(() => {
-                          const elem = document.getElementById('planning');
-                          elem?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                      }
-                    }}
+                    onClick={() => navigate('/#planning')}
                     className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
                   >
                     Choisir un créneau
