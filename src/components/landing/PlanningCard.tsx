@@ -108,7 +108,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           alt=""
           className={cn(
             'w-auto object-contain drop-shadow-lg',
-            compact ? 'h-12' : 'h-20 md:h-24'
+            compact ? (type === 'electric' ? 'h-14' : 'h-12') : type === 'electric' ? 'h-28 md:h-32' : 'h-20 md:h-24'
           )}
         />
       </div>

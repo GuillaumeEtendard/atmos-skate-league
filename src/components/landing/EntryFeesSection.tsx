@@ -180,17 +180,8 @@ const MainCard = () => {
           <span className="text-purple-300 font-semibold text-xs md:text-sm uppercase tracking-wider">Offre spéciale</span>
         </div>
         
-        <h3 
-          className="text-xl md:text-4xl font-bold text-foreground leading-tight"
-          style={{
-            textShadow: '0 0 30px rgba(168, 85, 247, 0.4)',
-          }}
-        >
-          Inscription KOTR & QOTR
-        </h3>
-        
         <p 
-          className="text-3xl md:text-5xl font-black text-[#ffd600]"
+          className="text-3xl md:text-5xl font-black text-[#fff]"
           style={{
             textShadow: '0 0 40px rgba(255, 214, 0, 0.5)',
           }}
@@ -199,7 +190,7 @@ const MainCard = () => {
         </p>
         
         <p className="text-sm md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty">
-          Repartez avec le <span className="font-bold text-[#ffd600]">maillot de votre choix</span> d'une valeur de 35 €. <span className="font-semibold text-foreground">Simple et gagnant !</span>
+          On t'offre <span className="font-bold text-[#ffd600]">le maillot de ton choix</span> d'une valeur de 35 €. Tu le recois en main propre le jour de la compétition. <span className="font-semibold text-foreground">C'est comme si l'inscription était&nbsp;gratuite&nbsp;!</span>
         </p>
         
         <Button
@@ -255,7 +246,7 @@ const EntryFeesSection = () => {
   return (
     <section className="py-20 md:py-28 px-4">
       <div className="container mx-auto max-w-6xl">
-        <SectionTitle>🎟️ Droits d'entrée</SectionTitle>
+        <SectionTitle>🎟️ Inscription</SectionTitle>
         
         {/* Main Card */}
         <div className="mb-12 md:mb-16">
@@ -277,7 +268,7 @@ const EntryFeesSection = () => {
           ))}
         </div>
 
-        {/* Mobile Slider */}
+        {/* Mobile: scroll horizontal fluide (momentum), snap doux à l'arrêt */}
         <div
           ref={sliderRef}
           onScroll={handleScroll}
@@ -286,8 +277,8 @@ const EntryFeesSection = () => {
           onPointerUp={drag.onPointerUp}
           onPointerCancel={drag.onPointerCancel}
           onPointerLeave={drag.onPointerLeave}
-          className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing overflow-y-hidden"
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          className="md:hidden scrollbar-hide flex snap-x gap-4 overflow-x-auto overflow-y-visible px-4 pb-4 cursor-grab select-none active:cursor-grabbing scroll-smooth"
+          style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x proximity' }}
         >
           {jerseys.map((jersey, index) => (
             <div key={index} className="min-w-[75vw] flex-shrink-0 snap-center">
