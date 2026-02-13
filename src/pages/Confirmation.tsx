@@ -16,6 +16,8 @@ const Confirmation = () => {
     const email = searchParams.get('email');
     const phone = searchParams.get('phone');
     const gender = searchParams.get('gender');
+    const jersey = searchParams.get('jersey');
+    const jerseySize = searchParams.get('jersey_size');
     const eventId = searchParams.get('event_id');
 
     if (!paymentIntent) {
@@ -49,6 +51,8 @@ const Confirmation = () => {
           email,
           phone,
           gender,
+          jersey: jersey || undefined,
+          jersey_size: jerseySize || undefined,
           eventId,
         }),
       })

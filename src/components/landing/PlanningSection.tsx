@@ -5,12 +5,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
 
 const events = [
-  { id: 'king-14-mars', date: 'Samedi 14 mars', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
-  { id: 'queen-28-mars', date: 'Samedi 28 mars', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
-  { id: 'king-11-avril', date: 'Samedi 11 avril', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20 },
-  { id: 'queen-25-avril', date: 'Samedi 25 avril', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20 },
-  { id: 'electric-9-mai', date: 'Samedi 9 mai', time: '19h30 / 21h30', title: 'Électrique', type: 'electric' as const, spotsRemaining: 20, totalSpots: 20 },
-  { id: 'mixte-23-mai', date: 'Samedi 23 mai', time: '19h30 / 21h30', title: 'Mixte', type: 'mixte' as const, spotsRemaining: 20, totalSpots: 20 },
+  { id: 'king-15-mars', date: 'DIMANCHE 15 MARS', time: '18H00 / 20H00', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: false },
+  { id: 'queen-28-mars', date: 'SAMEDI 28 MARS', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: false },
+  { id: 'king-11-avril', date: 'SAMEDI 11 AVRIL', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: true },
+  { id: 'queen-25-avril', date: 'SAMEDI 25 AVRIL', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: true },
+  { id: 'electric-9-mai', date: 'SAMEDI 9 MAI', time: '19h30 / 21h30', title: 'Électrique', type: 'electric' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: false },
+  { id: 'mixte-24-mai', date: 'DIMANCHE 24 MAI', time: '18H00 / 20H00', title: 'Mixte', type: 'mixte' as const, spotsRemaining: 20, totalSpots: 20, comingSoon: true },
 ];
 
 const PlanningSection = () => {

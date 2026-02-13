@@ -33,7 +33,7 @@ export default async function handler(
   }
 
   try {
-    const { paymentIntent, name, email, phone, gender, eventId } = req.body;
+    const { paymentIntent, name, email, phone, gender, jersey, jersey_size: jerseySize, eventId } = req.body;
 
     // Vérifier que tous les champs requis sont présents
     if (!paymentIntent || !name || !email || !phone || !gender) {
@@ -70,9 +70,14 @@ export default async function handler(
       payment_status: intent.status,
     };
 
-    // Ajouter l'event_id seulement s'il est fourni
     if (eventId) {
       insertData.event_id = eventId;
+    }
+    if (jersey) {
+      insertData.jersey = jersey;
+    }
+    if (jerseySize) {
+      insertData.jersey_size = jerseySize;
     }
 
     const { data: participant, error: dbError } = await supabase

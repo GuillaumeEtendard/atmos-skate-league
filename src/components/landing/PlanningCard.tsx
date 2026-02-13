@@ -12,6 +12,7 @@ interface PlanningCardProps {
   type: 'king' | 'queen' | 'electric' | 'mixte';
   spotsRemaining: number;
   totalSpots: number;
+  comingSoon?: boolean;
 }
 
 const typeStyles = {
@@ -45,7 +46,7 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -55,12 +56,13 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
   const styles = typeStyles[type];
 
   const handleRegistration = () => {
+    if (comingSoon) return;
     setSelectedSlot({ id, date, time, title, type });
     navigate('/inscription');
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (comingSoon || !cardRef.current) return;
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -91,7 +93,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
         className={cn(
           'relative overflow-hidden rounded-xl border bg-card p-6 transition-all duration-300',
           styles.border,
-          'group-hover:' + styles.glow
+          !comingSoon && 'group-hover:' + styles.glow
         )}
         style={{
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`,
@@ -138,12 +140,15 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots 
           <Button
             variant="outline"
             size="sm"
-            className="relative z-20 w-full cursor-pointer border-racing-yellow/50 text-racing-yellow hover:bg-racing-yellow/10"
-            disabled={spotsRemaining === 0}
+            className={cn(
+              'relative z-20 w-full border-racing-yellow/50',
+              comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow/10'
+            )}
+            disabled={spotsRemaining === 0 || comingSoon}
             onClick={handleRegistration}
             onMouseEnter={handleMouseLeave}
           >
-            {spotsRemaining === 0 ? 'COMPLET' : 'INSCRIPTION'}
+            {comingSoon ? 'COMING SOON' : spotsRemaining === 0 ? 'COMPLET' : 'INSCRIPTION'}
           </Button>
         </div>
       </div>

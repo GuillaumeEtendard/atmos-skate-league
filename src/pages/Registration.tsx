@@ -38,7 +38,7 @@ const typeStyles = {
 
 const Registration = () => {
   const navigate = useNavigate();
-  const [clientSecret, setClientSecret] = useState('');
+  const [clientSecret, setClientSecret] = useState('pi_3T0RxoAPiX9Fxyws3BfezTtm_secret_hVnRTG9rW2tfijq3WwvbtQFp0');
   const { selectedSlot } = useEventSlot();
 
   useEffect(() => {
@@ -201,7 +201,7 @@ const Registration = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">
-            {clientSecret ? (
+          {clientSecret ? (
               <Elements options={options} stripe={stripePromise}>
                 <RegistrationForm />
               </Elements>

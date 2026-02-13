@@ -17,6 +17,15 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useEventSlot } from '@/contexts/EventSlotContext';
+import { cn } from '@/lib/utils';
+
+const JERSEY_OPTIONS = [
+  { id: 'black-night', label: 'Black Night', src: '/atmos-uploads/black-night.webp' },
+  { id: 'white-sky', label: 'White Sky', src: '/atmos-uploads/white-sky.webp' },
+  { id: 'yellow-thunder', label: 'Yellow Thunder', src: '/atmos-uploads/yellow-thunder.png' },
+] as const;
+
+const JERSEY_SIZES = ['S', 'M', 'L', 'XL'] as const;
 
 const RegistrationForm = () => {
   const stripe = useStripe();
@@ -29,6 +38,8 @@ const RegistrationForm = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
+  const [jersey, setJersey] = useState<string>('');
+  const [jerseySize, setJerseySize] = useState<string>('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -38,10 +49,10 @@ const RegistrationForm = () => {
     }
 
     // Validation basique
-    if (!email || !name || !phone || !gender) {
+    if (!email || !name || !phone || !gender || !jersey || !jerseySize) {
       toast({
         title: 'Erreur',
-        description: 'Veuillez remplir tous les champs obligatoires',
+        description: 'Veuillez remplir tous les champs obligatoires, choisir un maillot et une taille',
         variant: 'destructive',
       });
       return;
@@ -59,6 +70,8 @@ const RegistrationForm = () => {
       returnUrl.searchParams.set('email', email);
       returnUrl.searchParams.set('phone', phone);
       returnUrl.searchParams.set('gender', gender);
+      returnUrl.searchParams.set('jersey', jersey);
+      returnUrl.searchParams.set('jersey_size', jerseySize);
 
       const { error } = await stripe.confirmPayment({
         elements,
@@ -142,11 +155,54 @@ const RegistrationForm = () => {
           <Label htmlFor="gender">Sexe *</Label>
           <Select value={gender} onValueChange={setGender} required>
             <SelectTrigger className="bg-background/50">
-              <SelectValue placeholder="Sélectionnez votre sexe" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="male">Homme</SelectItem>
               <SelectItem value="female">Femme</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-3">
+          <Label>Choisis ton maillot *</Label>
+          <div className="grid grid-cols-3 gap-3">
+            {JERSEY_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setJersey(opt.id)}
+                className={cn(
+                  'relative flex flex-col items-center rounded-lg border-2 p-2 transition-all overflow-hidden',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd600] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                  jersey === opt.id
+                    ? 'border-[#ffd600] bg-[#ffd600]/10 ring-2 ring-[#ffd600]/30'
+                    : 'border-border bg-background/50 hover:border-[#ffd600]/50 hover:bg-background/80'
+                )}
+              >
+                <div className="aspect-[3/4] w-full rounded-md overflow-hidden bg-muted">
+                  <img
+                    src={opt.src}
+                    alt={opt.label}
+                    className="h-full w-full object-cover object-top"
+                  />
+                </div>
+                <span className="mt-2 text-xs font-medium text-foreground">{opt.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="jersey_size">Taille du maillot *</Label>
+          <Select value={jerseySize} onValueChange={setJerseySize} required>
+            <SelectTrigger id="jersey_size" className="bg-background/50">
+              <SelectValue placeholder="Sélectionne ta taille" />
+            </SelectTrigger>
+            <SelectContent>
+              {JERSEY_SIZES.map((size) => (
+                <SelectItem key={size} value={size}>{size}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -167,7 +223,7 @@ const RegistrationForm = () => {
           <span className="text-2xl font-bold text-[#ffd600]">35,00 €</span>
         </div>
         <p className="text-sm text-muted-foreground">
-          Frais d'inscription à la ligue Atmos Skate League (includes jersey worth 35€)
+          Frais d'inscription à la ligue Atmos Skate League (inclut le maillot de 35€)
         </p>
       </div>
 
