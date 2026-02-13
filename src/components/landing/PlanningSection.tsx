@@ -41,11 +41,11 @@ const PlanningSection = () => {
 
         {/* Mobile: même taille de cartes qu'en carousel, 3 par ligne puis les 3 suivantes en dessous */}
         <div className="relative">
-          <div className="md:hidden flex flex-col gap-4 overflow-x-auto px-4 pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="md:hidden flex flex-col gap-4 overflow-x-auto overflow-y-visible px-4 pb-4 pt-24" style={{ WebkitOverflowScrolling: 'touch' }}>
             {Array.from({ length: Math.ceil(events.length / 3) }, (_, rowIndex) => (
               <div key={rowIndex} className="flex gap-4 flex-shrink-0">
                 {events.slice(rowIndex * 3, rowIndex * 3 + 3).map((event) => (
-                  <div key={event.id} className="min-w-[280px] flex-shrink-0">
+                  <div key={event.id} className="min-w-[280px] flex-shrink-0 overflow-visible">
                     <PlanningCard {...event} />
                   </div>
                 ))}

@@ -55,7 +55,6 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   const styles = rankStyles[index as keyof typeof rankStyles] || rankStyles[0];
 
@@ -76,12 +75,9 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
     setRotateY(rotateYValue);
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
-
   const handleMouseLeave = () => {
     setRotateX(0);
     setRotateY(0);
-    setIsHovered(false);
   };
 
   // Independent 3D for the image - moves opposite to card for parallax effect
@@ -93,7 +89,6 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
       ref={cardRef}
       className="group min-w-[300px] cursor-pointer md:min-w-[340px]"
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: '1200px' }}
     >
@@ -105,7 +100,7 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
           styles.glow
         )}
         style={{
-          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${isHovered ? '30px' : '0'}) scale(${isHovered ? 1.02 : 1})`,
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px) scale(1.02)`,
           transformStyle: 'preserve-3d',
           transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         }}
@@ -155,7 +150,7 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
         <div
           className="absolute -top-12 left-1/2 z-30 w-48 h-48 md:w-56 md:h-56"
           style={{
-            transform: `translateX(-50%) translateZ(80px) rotateX(${imageRotateX * 1.5}deg) rotateY(${imageRotateY * 1.5}deg) scale(${isHovered ? 1.15 : 1})`,
+            transform: `translateX(-50%) translateZ(80px) rotateX(${imageRotateX * 1.5}deg) rotateY(${imageRotateY * 1.5}deg) scale(1.15)`,
             transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
             transformStyle: 'preserve-3d',
           }}
@@ -164,18 +159,16 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
             src={image}
             alt={title}
             className={cn(
-              'w-full h-full object-contain transition-all duration-500',
-              styles.imageShadow,
-              isHovered && 'animate-float'
+              'w-full h-full object-contain transition-all duration-500 animate-float',
+              styles.imageShadow
             )}
           />
 
           {/* Glow ring under image */}
           <div
             className={cn(
-              'absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-8 rounded-full blur-xl opacity-60 transition-opacity duration-300',
-              index === 0 ? 'bg-yellow-400' : index === 1 ? 'bg-gray-400' : 'bg-orange-500',
-              isHovered ? 'opacity-80' : 'opacity-40'
+              'absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-8 rounded-full blur-xl opacity-80 transition-opacity duration-300',
+              index === 0 ? 'bg-yellow-400' : index === 1 ? 'bg-gray-400' : 'bg-orange-500'
             )}
             style={{ transform: 'translateY(20px) translateZ(-20px)' }}
           />
