@@ -8,7 +8,7 @@ interface PodiumCardProps {
   points: number;
   maxSpeed: string;
   chrono: string;
-  avatar: string;
+  avatar?: string;
 }
 
 const rankStyles = {
@@ -63,6 +63,7 @@ const rankStyles = {
 };
 
 const PodiumCard = ({ rank, name, points, maxSpeed, chrono, avatar }: PodiumCardProps) => {
+  const showPlaceholder = !avatar;
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -173,18 +174,29 @@ const PodiumCard = ({ rank, name, points, maxSpeed, chrono, avatar }: PodiumCard
           }}
         >
           <div className={cn(
-            'w-full h-full rounded-full ring-4 overflow-hidden',
+            'w-full h-full rounded-full ring-4 overflow-hidden flex items-center justify-center',
             styles.avatarRing,
-            styles.imageShadow
+            styles.imageShadow,
+            showPlaceholder && 'bg-muted/50'
           )}>
-            <img 
-              src={avatar} 
-              alt={name}
-              className={cn(
-                'w-full h-full object-cover transition-all duration-500',
+            {showPlaceholder ? (
+              <span className={cn(
+                'text-5xl md:text-6xl font-bold select-none',
+                styles.text,
                 isHovered && 'scale-110'
-              )}
-            />
+              )} style={{ transition: 'transform 0.4s' }}>
+                ?
+              </span>
+            ) : (
+              <img 
+                src={avatar} 
+                alt={name}
+                className={cn(
+                  'w-full h-full object-cover transition-all duration-500',
+                  isHovered && 'scale-110'
+                )}
+              />
+            )}
           </div>
           
           {/* Glow ring under avatar */}

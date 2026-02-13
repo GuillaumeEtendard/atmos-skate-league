@@ -73,7 +73,7 @@ const RewardsSection = () => {
   };
   return <section className="section-container texture-overlay overflow-visible pt-24 md:pt-28 pb-20 md:pb-28 relative">
       <div className="relative z-10">
-        <SectionTitle>REWARDS</SectionTitle>
+        <SectionTitle>RÉCOMPENSES</SectionTitle>
 
 
         {/* Slider Container */}

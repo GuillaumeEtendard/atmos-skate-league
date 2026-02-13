@@ -18,9 +18,9 @@ const rankings = {
 };
 
 const podiumData = [
-  { rank: 1, name: '1er — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face' },
-  { rank: 2, name: '2e — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face' },
-  { rank: 3, name: '3e — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face' },
+  { rank: 1, name: '1er — À venir', points: 0, maxSpeed: '—', chrono: '—' },
+  { rank: 2, name: '2e — À venir', points: 0, maxSpeed: '—', chrono: '—' },
+  { rank: 3, name: '3e — À venir', points: 0, maxSpeed: '—', chrono: '—' },
 ];
 
 const RankingSection = () => {

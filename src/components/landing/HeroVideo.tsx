@@ -57,18 +57,6 @@ const HeroVideo = () => {
           LA 1ÈRE LIGUE DE <span className="text-gradient-yellow">ROLLERS</span>
         </h1>
 
-        {/* Subtitle */}
-        <p 
-          className="mb-8 text-xl font-light uppercase tracking-widest text-foreground/80 md:text-2xl"
-          style={{
-            opacity: isLoaded ? 1 : 0,
-            transform: isLoaded ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.3s, transform 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.3s',
-          }}
-        >
-          BIENVENUE DANS L'ATMOS SKATE LEAGUE
-        </p>
-
         {/* CTA Button */}
         <div 
           style={{

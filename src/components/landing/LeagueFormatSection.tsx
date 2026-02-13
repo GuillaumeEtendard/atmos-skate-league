@@ -156,7 +156,7 @@ const LeagueFormatSection = () => {
           onPointerUp={drag.onPointerUp}
           onPointerCancel={drag.onPointerCancel}
           onPointerLeave={drag.onPointerLeave}
-          className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory cursor-grab select-none active:cursor-grabbing"
+          className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory cursor-grab select-none active:cursor-grabbing items-stretch h-[480px]"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {slides.map((slide, idx) => {
@@ -164,9 +164,9 @@ const LeagueFormatSection = () => {
             const isDark = slide.textColor === "dark";
             const isDarkBg = slide.bgColor === "#232323";
             return (
-              <div key={slide.id} className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center">
+              <div key={slide.id} className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center h-full">
                 <div 
-                  className="relative min-h-[420px] rounded-2xl overflow-hidden"
+                  className="relative h-full rounded-2xl overflow-hidden flex flex-col"
                   style={{ backgroundColor: slide.bgColor }}
                 >
                   {/* Glow Effect - no yellow on dark backgrounds */}
@@ -178,7 +178,7 @@ const LeagueFormatSection = () => {
                   )}
 
                   {/* Content */}
-                  <div className="relative z-10 p-6">
+                  <div className="relative z-10 p-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                     {/* Logo */}
                     <div className="flex justify-center mb-4">
                       <img 
@@ -196,8 +196,8 @@ const LeagueFormatSection = () => {
                       {slide.title}
                     </h3>
 
-                    {/* Text */}
-                    <div className="space-y-2 mb-6">
+                    {/* Text - prend l'espace restant, scroll si trop long */}
+                    <div className="space-y-2 mb-6 flex-1 min-h-0 overflow-y-auto">
                       {slide.text.map((paragraph, pIdx) => (
                         <p key={pIdx} className={cn(
                           "text-sm leading-relaxed text-center",
@@ -208,10 +208,10 @@ const LeagueFormatSection = () => {
                       ))}
                     </div>
 
-                    {/* Location Pin */}
+                    {/* Location Pin - collé en bas de la carte sur mobile */}
                     {slide.location && (
                       <div className={cn(
-                        "flex items-center justify-center gap-2 pt-3 border-t",
+                        "flex items-center justify-center gap-2 pt-3 border-t mt-auto flex-shrink-0",
                         isDark ? "border-black/10" : "border-white/20"
                       )}>
                         <div className={cn(

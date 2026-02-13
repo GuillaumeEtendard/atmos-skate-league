@@ -5,6 +5,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
 import { EVENTS } from '@/data/events';
 
+/** Plafond "places restantes" affiché : on affiche au plus ce nombre ; s'il en reste moins (plus d'inscrits), on affiche le nombre réel. */
+const MAX_SPOTS_REMAINING_DISPLAYED: Record<string, number> = {
+  'king-15-mars': 10,
+  'queen-28-mars': 15,
+  'electric-9-mai': 18,
+};
+
 const PlanningSection = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -19,10 +26,18 @@ const PlanningSection = () => {
       .catch(() => {});
   }, []);
 
-  const events = EVENTS.map((event) => ({
-    ...event,
-    spotsRemaining: Math.max(0, event.totalSpots - (participantCounts[event.id] ?? 0)),
-  }));
+  const events = EVENTS.map((event) => {
+    const rawCount = participantCounts[event.id] ?? 0;
+    const actualRemaining = Math.max(0, event.totalSpots - rawCount);
+    const maxDisplayed = MAX_SPOTS_REMAINING_DISPLAYED[event.id];
+    const spotsRemaining = maxDisplayed != null
+      ? Math.min(maxDisplayed, actualRemaining)
+      : actualRemaining;
+    return {
+      ...event,
+      spotsRemaining,
+    };
+  });
 
   const scrollToSlide = (index: number) => {
     if (!sliderRef.current) return;

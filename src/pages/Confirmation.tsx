@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 const Confirmation = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'registration_error'>('loading');
 
   useEffect(() => {
     const paymentIntent = searchParams.get('payment_intent');
@@ -56,24 +56,28 @@ const Confirmation = () => {
       })
         .then((res) => {
           if (!res.ok) {
-            // Si c'est une duplication (409), c'est OK - le participant est déjà enregistré
             if (res.status === 409) {
               sessionStorage.setItem(registrationKey, 'true');
               setStatus('success');
               return;
             }
-            throw new Error('Failed to register participant');
+            if (res.status === 400) {
+              setStatus('error');
+              return;
+            }
+            setStatus('registration_error');
+            return;
           }
           return res.json();
         })
-        .then(() => {
+        .then((data) => {
+          if (data == null) return;
           sessionStorage.setItem(registrationKey, 'true');
           setStatus('success');
         })
         .catch((error) => {
           console.error('Error registering participant:', error);
-          // Important: afficher une erreur si l'enregistrement échoue
-          setStatus('error');
+          setStatus('registration_error');
         });
     } else {
       setStatus('error');
@@ -143,6 +147,28 @@ const Confirmation = () => {
               </>
             )}
 
+            {status === 'registration_error' && (
+              <>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring' }}
+                >
+                  <XCircle className="h-16 w-16 mx-auto text-amber-500 mb-4" />
+                </motion.div>
+                <h1 className="text-3xl font-bold mb-2 text-amber-500">Paiement reçu, inscription en attente</h1>
+                <p className="text-muted-foreground mb-6">
+                  Votre paiement a bien été enregistré, mais nous n&apos;avons pas pu finaliser votre inscription (problème technique). Contactez-nous avec votre email pour que nous puissions valider votre inscription.
+                </p>
+                <Button
+                  onClick={() => navigate('/')}
+                  className="w-full bg-[#ffd600] hover:bg-[#ffd600]/90 text-black font-semibold"
+                >
+                  Retour à l&apos;accueil
+                </Button>
+              </>
+            )}
+
             {status === 'error' && (
               <>
                 <motion.div
@@ -154,7 +180,7 @@ const Confirmation = () => {
                 </motion.div>
                 <h1 className="text-3xl font-bold mb-2 text-red-500">Erreur de paiement</h1>
                 <p className="text-muted-foreground mb-6">
-                  Une erreur est survenue lors du traitement de votre paiement. Aucun montant n'a été débité.
+                  Une erreur est survenue lors du traitement de votre paiement. Aucun montant n&apos;a été débité.
                 </p>
                 <div className="space-y-3">
                   <Button
@@ -168,7 +194,7 @@ const Confirmation = () => {
                     variant="outline"
                     className="w-full"
                   >
-                    Retour à l'accueil
+                    Retour à l&apos;accueil
                   </Button>
                 </div>
               </>
