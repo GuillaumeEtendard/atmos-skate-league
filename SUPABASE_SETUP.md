@@ -27,6 +27,7 @@ URL : https://supabase.com/dashboard/project/hrughgshjjaewouqfpdo
    - `supabase/migrations/003_add_event_id_field.sql` (ajoute le créneau sélectionné)
    - `supabase/migrations/004_add_jersey_and_jersey_size.sql` (maillot + taille S, M, L, XL)
    - `supabase/migrations/005_remove_gender_column.sql` (supprime le champ sexe)
+   - `supabase/migrations/006_add_status_column.sql` (statut inscription : success / canceled)
 4. **Exécutez** chaque query (bouton "RUN" ou Ctrl/Cmd + Enter)
 
 **Alternative** : si le projet est lié au CLI Supabase (`supabase link`), exécutez `supabase db push` pour appliquer toutes les migrations.
@@ -36,6 +37,7 @@ Les scripts vont créer :
 - ✅ Champ `event_id` pour stocker le créneau/événement sélectionné
 - ✅ Champs `jersey` (black-night, white-sky, yellow-thunder) et `jersey_size` (S, M, L, XL)
 - ✅ Pas de champ sexe/genre (supprimé par la migration 005)
+- ✅ Champ `status` (success par défaut à l’inscription, canceled = annulé, non compté dans les places)
 - ✅ Index pour optimiser les recherches
 - ✅ Row Level Security (RLS) activé
 - ✅ Politiques de sécurité
@@ -95,6 +97,7 @@ Dans le dashboard Vercel :
 | `event_id` | VARCHAR(100) | Créneau/événement sélectionné (optionnel) |
 | `jersey` | VARCHAR(50) | Maillot (black-night, white-sky, yellow-thunder) |
 | `jersey_size` | VARCHAR(5) | Taille (S, M, L, XL) |
+| `status` | VARCHAR(20) | Statut : `success` (défaut) ou `canceled` (non compté) |
 | `payment_intent_id` | VARCHAR(255) | ID Stripe (unique) |
 | `amount` | DECIMAL(10,2) | Montant payé en euros |
 | `currency` | VARCHAR(3) | Devise (eur) |

@@ -21,6 +21,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/inscription" element={<Registration />} />
+            <Route path="/inscription/:eventId" element={<Registration />} />
             <Route path="/confirmation" element={<Confirmation />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

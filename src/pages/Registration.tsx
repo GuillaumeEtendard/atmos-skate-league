@@ -4,10 +4,11 @@ import { Elements } from '@stripe/react-stripe-js';
 import RegistrationForm from '@/components/registration/RegistrationForm';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Trophy } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { cn } from '@/lib/utils';
+import { getEventById } from '@/data/events';
 
 // Chargez votre clé publique Stripe
 // IMPORTANT: Remplacez cette valeur par votre clé publique Stripe
@@ -38,8 +39,31 @@ const typeStyles = {
 
 const Registration = () => {
   const navigate = useNavigate();
+  const { eventId } = useParams<{ eventId?: string }>();
   const [clientSecret, setClientSecret] = useState('');
-  const { selectedSlot } = useEventSlot();
+  const { selectedSlot, setSelectedSlot } = useEventSlot();
+
+  // Restaurer le créneau depuis l'URL au chargement (ex. retour sur la page, lien enregistré)
+  useEffect(() => {
+    if (!eventId) return;
+    const event = getEventById(eventId);
+    if (event) {
+      setSelectedSlot({
+        id: event.id,
+        date: event.date,
+        time: event.time,
+        title: event.title,
+        type: event.type,
+      });
+    }
+  }, [eventId, setSelectedSlot]);
+
+  // Garder l'URL en sync avec le créneau sélectionné (sauvegarde dans l'URL)
+  useEffect(() => {
+    if (selectedSlot && selectedSlot.id !== eventId) {
+      navigate(`/inscription/${selectedSlot.id}`, { replace: true });
+    }
+  }, [selectedSlot, eventId, navigate]);
 
   useEffect(() => {
     // Créer un PaymentIntent dès que la page se charge

@@ -3,17 +3,7 @@ import PlanningCard from './PlanningCard';
 import SectionTitle from './SectionTitle';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
-
-const TOTAL_SPOTS = 20;
-
-const EVENTS = [
-  { id: 'king-15-mars', date: 'DIMANCHE 15 MARS', time: '18H00 / 20H00', title: 'King of the Road', type: 'king' as const, totalSpots: TOTAL_SPOTS, comingSoon: false },
-  { id: 'queen-28-mars', date: 'SAMEDI 28 MARS', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, totalSpots: TOTAL_SPOTS, comingSoon: false },
-  { id: 'king-11-avril', date: 'SAMEDI 11 AVRIL', time: '19h30 / 21h30', title: 'King of the Road', type: 'king' as const, totalSpots: TOTAL_SPOTS, comingSoon: true },
-  { id: 'queen-25-avril', date: 'SAMEDI 25 AVRIL', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen' as const, totalSpots: TOTAL_SPOTS, comingSoon: true },
-  { id: 'electric-9-mai', date: 'SAMEDI 9 MAI', time: '19h30 / 21h30', title: 'Électrique', type: 'electric' as const, totalSpots: TOTAL_SPOTS, comingSoon: false },
-  { id: 'mixte-24-mai', date: 'DIMANCHE 24 MAI', time: '18H00 / 20H00', title: 'Mixte', type: 'mixte' as const, totalSpots: TOTAL_SPOTS, comingSoon: true },
-];
+import { EVENTS } from '@/data/events';
 
 const PlanningSection = () => {
   const sliderRef = useRef<HTMLDivElement>(null);

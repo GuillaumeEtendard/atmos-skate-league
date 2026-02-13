@@ -65,7 +65,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   const handleRegistration = () => {
     if (comingSoon) return;
     setSelectedSlot({ id, date, time, title, type });
-    navigate('/inscription');
+    navigate(`/inscription/${id}`);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {

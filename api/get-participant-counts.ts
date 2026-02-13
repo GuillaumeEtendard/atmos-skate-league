@@ -37,7 +37,8 @@ export default async function handler(
     const { data: rows, error } = await supabase
       .from('participants')
       .select('event_id')
-      .in('event_id', eventIds);
+      .in('event_id', eventIds)
+      .neq('status', 'canceled');
 
     if (error) {
       console.error('Supabase error:', error);
