@@ -185,7 +185,8 @@ const FormatBlock = ({
       </div>
     </div>;
 };
-const eventSlides = ['king', 'queen', 'mixte', 'electric'] as const;
+// Sur mobile : 3 slides (King, Queen, Mixte+Atmos Riders empilés)
+const eventSlides = ['king', 'queen', 'mixte-electric'] as const;
 const EventExplanation = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -220,19 +221,17 @@ const EventExplanation = () => {
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Title */}
         <h2 className="mb-8 md:mb-12 text-center text-3xl font-bold uppercase tracking-wide text-foreground md:text-5xl">
-          <span className="text-gradient-yellow drop-shadow-[0_0_30px_hsl(45_100%_50%/0.3)]">LE KING OF THE ROAD, EN BREF</span>
+          <span className="text-gradient-yellow drop-shadow-[0_0_30px_hsl(45_100%_50%/0.3)]">LES QUALIFICATIONS</span>
         </h2>
 
         {/* Content */}
         <div className="mb-10 md:mb-16 space-y-3 text-center text-base text-foreground/80 md:text-xl max-w-3xl mx-auto">
           <p className="text-pretty">
             Une compétition intense où <span className="font-bold text-[#ffd600]">20 participants</span> s'affrontent dans une série de courses à élimination.
+            Les courses se déroulent en <span className="font-bold text-[#ffd600]">3 phases</span>, où seuls les <span className="font-bold text-[#ffd600]">3 plus rapides</span> se qualifient pour la phase suivante.
           </p>
-          <p className="text-pretty">
-            Les courses se déroulent en <span className="font-bold text-[#ffd600]">3 phases</span>, où seuls les <span className="font-bold text-[#ffd600]">3 meilleurs</span> se qualifient pour la finale.
-          </p>
-          <p className="text-pretty">
-            La course finale couronne le <span className="text-gradient-yellow font-bold">King</span> ou la <span className="text-gradient-yellow font-bold">Queen</span> of the Road.
+            <p className="text-pretty">
+            La course finale couronne le <span className="text-gradient-yellow font-bold">Roi</span> ou la <span className="text-gradient-yellow font-bold">Reine</span> de la Route.
           </p>
         </div>
 
@@ -270,17 +269,13 @@ const EventExplanation = () => {
             </FormatBlock>
           </div>
 
-          {/* Block 3: Course Mixte */}
-          <div className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center">
+          {/* Block 3 + 4 sur mobile : Course Mixte et Atmos Riders un en dessous de l'autre */}
+          <div className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center flex flex-col gap-4">
             <FormatBlock title="COURSE MIXTE" type="mixte" image={mixteVsLogo} imageSize="large">
               <p>
                 Ouverte à toutes et tous, sans distinction de genre !
               </p>
             </FormatBlock>
-          </div>
-
-          {/* Block 4: Atmos Riders */}
-          <div className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center">
             <FormatBlock title="ATMOS RIDERS" type="electric" hasElectricEffect image={atmosElectricLogo} imageSize="large">
               <p>
                 Course exclusive en Rollers électriques pour nos clients !

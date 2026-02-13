@@ -32,11 +32,11 @@ const slides: Slide[] = [
   {
     id: 1,
     mainTitle: "INTRO",
-    title: "Une ligue, une vision",
+    title: "Un nouveau sport",
     text: [
-      "AtmosGear va créer son Rollerball… pour de vrai.",
-      "La première compétition de roller électrique où deux équipes de cinq joueurs vont s'affronter en live, devant 2 000 personnes sur place et des milliers en streaming.",
-      "Le but ? Remettre le roller au sommet et offrir à la communauté un vrai événement spectaculaire !"
+      "En 2026, AtmosGear va créer le Rollerball en vrai.",
+      "Un genre de Rollerderby bousté avec un ballon et 4 équipes qui s'affrontent en Roller électriques. Devant 2000 personnes en physique et 100 000 en live sur Twitch.",
+      "Le but ? Remettre le Roller au sommet et offrir à la communauté un vrai événement spectaculaire !"
     ],
     bgColor: "#232323",
     textColor: "light"
@@ -44,12 +44,12 @@ const slides: Slide[] = [
   {
     id: 2,
     mainTitle: "PHASE 1",
-    title: "Phase 1 – KOTR & QOTR",
+    title: "Phase 1 – Qualifications",
     text: [
-      "De mars à mai, les KOTR (King of the Road) et QOTR (Queen of the Road) servent de qualifications officielles.",
-      "Les 18 meilleurs patineurs et patineuses de France sont sélectionnés pour accéder à l'Atmos Skate League."
+      "De Mars à Mai, les KOTR (King of the Road) et QOTR (Queen of the Road) servent de qualifications officielles pour dénicher les 18 meilleurs Patineur(se)s de France."
+      , "Avec 6 Courses au total."
     ],
-    location: "Circuit de Karting Smile World – Bercy 2",
+    location: "Karting Smile World – Bercy 2",
     bgColor: "#FFFFFF",
     textColor: "dark"
   },
@@ -58,11 +58,10 @@ const slides: Slide[] = [
     mainTitle: "PHASE 2",
     title: "Phase 2 – Constitution des équipes",
     text: [
-      "En juin, les joueurs qualifiés intègrent les 4 équipes officielles :",
-      "Black Night, Yellow Thunder, White Sky et All Star.",
-      "Ces équipes formeront le roster final de l'ASL."
+      "En Juin, les joueurs qualifiés intègrent les 3 équipes officielles : Black NIGHT, Yellow THUNDER & White SKY.",
+      "Chaque équipe sera dirigée par un gros créateur de contenu Français."
     ],
-    location: "Circuit de Karting Smile World – Bercy 2",
+    location: "Karting Smile World – Bercy 2",
     bgColor: "#FFB03B",
     textColor: "dark"
   },
@@ -72,6 +71,7 @@ const slides: Slide[] = [
     title: "Phase 3 – Bootcamps",
     text: [
       "De juillet à octobre, tous les joueurs se retrouvent 3 jours par mois pour s'entraîner, se préparer et créer une cohésion d'équipe forte."
+      , "Les entraînements seront filmés et rediffusés en live sur Twitch."
     ],
     location: "Île-de-France",
     bgColor: "#232323",
@@ -148,7 +148,7 @@ const LeagueFormatSection = () => {
       {/* Carousel Container */}
       <div className="container mx-auto px-4 relative">
         {/* Mobile Swipeable Slider */}
-        <div 
+        <div
           ref={sliderRef}
           onScroll={handleScroll}
           onPointerDown={drag.onPointerDown}
@@ -165,7 +165,7 @@ const LeagueFormatSection = () => {
             const isDarkBg = slide.bgColor === "#232323";
             return (
               <div key={slide.id} className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center h-full">
-                <div 
+                <div
                   className="relative h-full rounded-2xl overflow-hidden flex flex-col"
                   style={{ backgroundColor: slide.bgColor }}
                 >
@@ -177,30 +177,30 @@ const LeagueFormatSection = () => {
                     )} />
                   )}
 
-                  {/* Content */}
-                  <div className="relative z-10 p-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
+                  {/* Content - centré */}
+                  <div className="relative z-10 p-6 flex flex-col flex-1 min-h-0 items-center">
                     {/* Logo */}
                     <div className="flex justify-center mb-4">
-                      <img 
-                        src={slideLogos[slide.id].src} 
-                        alt="Logo" 
+                      <img
+                        src={slideLogos[slide.id].src}
+                        alt="Logo"
                         className={`${slideLogos[slide.id].sizeClass} w-auto object-contain`}
                       />
                     </div>
 
                     {/* Title */}
                     <h3 className={cn(
-                      "text-2xl font-black uppercase tracking-wide mb-4 text-center",
+                      "text-2xl font-black uppercase tracking-wide mb-4 text-center w-full",
                       isDark ? "text-black" : "text-white"
                     )}>
                       {slide.title}
                     </h3>
 
-                    {/* Text - prend l'espace restant, scroll si trop long */}
-                    <div className="space-y-2 mb-6 flex-1 min-h-0 overflow-y-auto">
+                    {/* Text - prend l'espace restant, centré et plus gros */}
+                    <div className="space-y-3 mb-6 flex-1 min-h-0 w-full flex flex-col items-center">
                       {slide.text.map((paragraph, pIdx) => (
                         <p key={pIdx} className={cn(
-                          "text-sm leading-relaxed text-center",
+                          "text-base leading-relaxed text-center w-full max-w-md",
                           isDark ? "text-black/70" : "text-white/70"
                         )}>
                           {paragraph}
@@ -211,13 +211,13 @@ const LeagueFormatSection = () => {
                     {/* Location Pin - collé en bas de la carte sur mobile */}
                     {slide.location && (
                       <div className={cn(
-                        "flex items-center justify-center gap-2 pt-3 border-t mt-auto flex-shrink-0",
+                        "flex items-center justify-center gap-2 pt-3 border-t mt-auto flex-shrink-0 w-full",
                         isDark ? "border-black/10" : "border-white/20"
                       )}>
                         <div className={cn(
                           "flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300",
-                          isDark 
-                            ? "bg-black/10" 
+                          isDark
+                            ? "bg-black/10"
                             : "bg-white/15"
                         )}>
                           <MapPin className={cn(
@@ -226,7 +226,7 @@ const LeagueFormatSection = () => {
                           )} />
                         </div>
                         <span className={cn(
-                          "text-sm font-semibold tracking-tight",
+                          "text-base font-semibold tracking-tight",
                           isDark ? "text-black" : "text-white"
                         )}>
                           {slide.location}
@@ -271,8 +271,8 @@ const LeagueFormatSection = () => {
           </button>
 
           {/* Card */}
-          <div 
-            className="relative w-full max-w-3xl min-h-[450px] md:min-h-[500px] rounded-2xl overflow-hidden transition-colors duration-500"
+          <div
+            className="relative w-full max-w-3xl min-h-[450px] md:min-h-[500px] rounded-2xl overflow-hidden transition-colors duration-500 flex flex-col"
             style={{ backgroundColor: currentSlide.bgColor }}
           >
             {/* Glow Effect - no yellow on dark backgrounds */}
@@ -283,8 +283,8 @@ const LeagueFormatSection = () => {
               )} />
             )}
 
-            {/* Content */}
-            <div className="relative z-10 p-8 md:p-12">
+            {/* Content - centré verticalement et horizontalement */}
+            <div className="relative z-10 p-8 md:p-12 flex-1 flex flex-col items-center justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -292,30 +292,30 @@ const LeagueFormatSection = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-                  className="flex flex-col items-center"
+                  className="flex flex-col items-center max-w-2xl w-full"
                 >
                   {/* Logo */}
                   <div className="flex justify-center mb-4">
-                    <img 
-                      src={slideLogos[currentSlide.id].src} 
-                      alt="Logo" 
+                    <img
+                      src={slideLogos[currentSlide.id].src}
+                      alt="Logo"
                       className={`${slideLogos[currentSlide.id].desktopSizeClass} w-auto object-contain`}
                     />
                   </div>
 
                   {/* Title */}
                   <h3 className={cn(
-                    "text-3xl md:text-4xl font-black uppercase tracking-wide mb-6 text-center",
+                    "text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide mb-6 text-center w-full",
                     currentSlide.textColor === "dark" ? "text-black" : "text-white"
                   )}>
                     {currentSlide.title}
                   </h3>
 
-                  {/* Text */}
-                  <div className="space-y-3 mb-8 max-w-2xl">
+                  {/* Text - centré et plus gros */}
+                  <div className="space-y-4 mb-8 max-w-2xl w-full mx-auto">
                     {currentSlide.text.map((paragraph, idx) => (
                       <p key={idx} className={cn(
-                        "text-base md:text-lg leading-relaxed text-center",
+                        "text-lg md:text-xl leading-relaxed text-center",
                         currentSlide.textColor === "dark" ? "text-black/70" : "text-white/70"
                       )}>
                         {paragraph}
@@ -326,13 +326,13 @@ const LeagueFormatSection = () => {
                   {/* Location Pin */}
                   {currentSlide.location && (
                     <div className={cn(
-                      "flex items-center gap-3 pt-4 border-t",
+                      "flex items-center justify-center gap-3 pt-4 border-t w-full",
                       currentSlide.textColor === "dark" ? "border-black/10" : "border-white/20"
                     )}>
                       <div className={cn(
                         "flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300",
-                        currentSlide.textColor === "dark" 
-                          ? "bg-black/10" 
+                        currentSlide.textColor === "dark"
+                          ? "bg-black/10"
                           : "bg-white/15"
                       )}>
                         <MapPin className={cn(
@@ -341,7 +341,7 @@ const LeagueFormatSection = () => {
                         )} />
                       </div>
                       <span className={cn(
-                        "text-base md:text-lg font-semibold tracking-tight",
+                        "text-lg md:text-xl font-semibold tracking-tight",
                         currentSlide.textColor === "dark" ? "text-black" : "text-white"
                       )}>
                         {currentSlide.location}
