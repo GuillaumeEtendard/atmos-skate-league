@@ -6,9 +6,9 @@ import SectionTitle from './SectionTitle';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDragScroll } from '@/hooks/use-drag-scroll';
 import rollerPrizeGold from '@/assets/roller-prize.png';
-import cinnarollPrize from '@/assets/cinnaroll-prize.png';
+import cinnarollPrize from '@/assets/Platine_Reward_2_KOTR.png';
 import smileWorldPrize from '@/assets/smile-world-prize.png';
-import aslLogo from '@/assets/asl-logo-white.png';
+import aslLogo from '@/assets/ASL_Finale_Photo.png';
 const rewards = [{
   title: 'Rollers Électriques Atmos',
   value: '750€',
@@ -117,7 +117,7 @@ const RewardsSection = () => {
           {/* Title above the featured card */}
           <h3 className="text-xl md:text-3xl font-bold text-center mb-6 md:mb-8 uppercase tracking-wide">
             <span className="text-gradient-yellow drop-shadow-[0_0_20px_hsl(45_100%_50%/0.4)]">
-              Remporte ta place pour l'Atmos Skate League
+              Gagne ton contrat pour<br />la Atmos Skate League
             </span>
           </h3>
 
@@ -168,12 +168,12 @@ const RewardsSection = () => {
               <div className="relative z-10 flex flex-col items-center text-center">
               {/* Main text */}
                 <p className="text-lg md:text-2xl lg:text-3xl font-bold text-yellow-100 mb-8 max-w-2xl leading-relaxed text-pretty">
-                  Les 3 gagnants de chaque course remportent leur place pour l'<span className="text-[#ffd600] drop-shadow-[0_0_10px_hsl(45_100%_50%/0.6)]">Atmos Skate League</span>, l'événement de fin de saison.
+                  Les 3 gagnants de chaque tournoi accèdent à la Ligue officielle <span className="text-[#ffd600] drop-shadow-[0_0_10px_hsl(45_100%_50%/0.6)]">Atmos Skate League</span>, l'événement de fin de saison.
                 </p>
 
                 {/* ASL Logo */}
                 <div className="relative">
-                  <img src={aslLogo} alt="Atmos Skate League" className="h-24 md:h-32 lg:h-40 w-auto drop-shadow-[0_0_30px_rgba(255,214,0,0.4)]" />
+                  <img src={aslLogo} alt="Atmos Skate League" className="h-40 md:h-56 lg:h-72 w-auto drop-shadow-[0_0_40px_rgba(255,214,0,0.4)]" />
                   {/* Glow under logo */}
                   <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-yellow-400/30 blur-xl rounded-full" />
                 </div>

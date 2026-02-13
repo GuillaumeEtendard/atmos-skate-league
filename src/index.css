@@ -170,18 +170,18 @@
     transform: translateZ(20px);
   }
 
-  /* Floating Animation - Smoother */
+  /* Floating Animation - bas → haut → bas, lent et lisible */
   @keyframes float {
     0%, 100% {
-      transform: translateY(0px) translateZ(0);
+      transform: translateY(0) translateZ(0);
     }
     50% {
-      transform: translateY(-8px) translateZ(0);
+      transform: translateY(-14px) translateZ(0);
     }
   }
 
   .animate-float {
-    animation: float 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    animation: float 10s ease-in-out infinite;
     will-change: transform;
   }
 
