@@ -168,7 +168,7 @@ const RewardsSection = () => {
               <div className="relative z-10 flex flex-col items-center text-center">
               {/* Main text */}
                 <p className="text-lg md:text-2xl lg:text-3xl font-bold text-yellow-100 mb-8 max-w-2xl leading-relaxed text-pretty">
-                  Les 3 gagnants de chaque tournoi accèdent à la Ligue officielle <span className="text-[#ffd600] drop-shadow-[0_0_10px_hsl(45_100%_50%/0.6)]">Atmos Skate League</span>, l'événement de fin de saison.
+                  Les 3 gagnants de chaque tournoi accèdent à la Ligue officielle.
                 </p>
 
                 {/* ASL Logo */}
