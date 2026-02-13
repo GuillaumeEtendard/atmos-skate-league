@@ -148,7 +148,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           {/* Spots Remaining */}
           <div className="mb-4 text-center">
             <span className={cn('text-sm font-medium', spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground')}>
-              places restantes {spotsRemaining}/{totalSpots}
+              Places restantes {spotsRemaining}/{totalSpots}
             </span>
           </div>
 
