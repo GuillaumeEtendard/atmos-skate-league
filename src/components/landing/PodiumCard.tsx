@@ -177,7 +177,7 @@ const PodiumCard = ({ rank, name, points, maxSpeed, chrono, avatar }: PodiumCard
             'w-full h-full rounded-full ring-4 overflow-hidden flex items-center justify-center',
             styles.avatarRing,
             styles.imageShadow,
-            showPlaceholder && 'bg-muted/50'
+            showPlaceholder && 'bg-white'
           )}>
             {showPlaceholder ? (
               <span className={cn(

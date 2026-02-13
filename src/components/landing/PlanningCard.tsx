@@ -13,6 +13,8 @@ interface PlanningCardProps {
   spotsRemaining: number;
   totalSpots: number;
   comingSoon?: boolean;
+  /** Mode compact pour la grille mobile (3 cartes par ligne). */
+  compact?: boolean;
 }
 
 const TYPE_LOGOS: Record<'king' | 'queen' | 'electric' | 'mixte', string> = {
@@ -53,7 +55,7 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, compact = false }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -93,33 +95,41 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   return (
     <div
       ref={cardRef}
-      className="card-3d group relative min-w-[260px] md:min-w-0 overflow-visible"
+      className={cn(
+        'card-3d group relative overflow-visible',
+        compact ? 'min-w-0 w-full' : 'min-w-[260px] md:min-w-0'
+      )}
       style={{ perspective: '1000px' }}
     >
       {/* Logo type en haut à droite, débordant */}
-      <div className="absolute -top-2 -right-2 z-20 pointer-events-none">
+      <div className={cn('absolute -top-2 -right-2 z-20 pointer-events-none', compact && '-top-1 -right-1')}>
         <img
           src={TYPE_LOGOS[type]}
           alt=""
-          className="h-20 w-auto object-contain drop-shadow-lg md:h-24"
+          className={cn(
+            'w-auto object-contain drop-shadow-lg',
+            compact ? 'h-12' : 'h-20 md:h-24'
+          )}
         />
       </div>
 
       <div
         className={cn(
-          'relative overflow-hidden rounded-xl border bg-card p-6 transition-all duration-300',
+          'relative overflow-hidden rounded-xl border bg-card transition-all duration-300',
+          compact ? 'p-3' : 'p-6',
           styles.border,
           !comingSoon && 'group-hover:' + styles.glow
         )}
         style={{
-          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`,
+          transform: compact ? undefined : `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`,
           transformStyle: 'preserve-3d',
         }}
         >
           {/* Background Gradient - pointer-events-none pour laisser les clics au contenu */}
           <div className={cn('absolute inset-0 pointer-events-none bg-gradient-to-t opacity-50', styles.gradient)} />
 
-          {/* Floating particles effect at bottom */}
+          {/* Floating particles effect at bottom - masqué en compact */}
+          {!compact && (
           <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden pointer-events-none">
             <div className={cn('absolute bottom-2 left-4 w-1 h-1 rounded-full animate-float', type === 'king' ? 'bg-racing-yellow/60' : type === 'queen' ? 'bg-racing-purple/60' : type === 'electric' ? 'bg-racing-blue/60' : 'bg-racing-red/60')} style={{ animationDelay: '0s' }} />
             <div className={cn('absolute bottom-6 left-12 w-1.5 h-1.5 rounded-full animate-float', type === 'king' ? 'bg-racing-yellow/40' : type === 'queen' ? 'bg-racing-purple/40' : type === 'electric' ? 'bg-racing-blue/40' : 'bg-racing-red/40')} style={{ animationDelay: '0.5s' }} />
@@ -127,27 +137,46 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             <div className={cn('absolute bottom-8 right-16 w-0.5 h-0.5 rounded-full animate-float', type === 'king' ? 'bg-racing-yellow/70' : type === 'queen' ? 'bg-racing-purple/70' : type === 'electric' ? 'bg-racing-blue/70' : 'bg-racing-red/70')} style={{ animationDelay: '1.5s' }} />
             <div className={cn('absolute bottom-3 left-1/2 w-1 h-1 rounded-full animate-float', type === 'king' ? 'bg-racing-yellow/45' : type === 'queen' ? 'bg-racing-purple/45' : type === 'electric' ? 'bg-racing-blue/45' : 'bg-racing-red/45')} style={{ animationDelay: '2s' }} />
           </div>
+          )}
 
           {/* Content - z-20 et isolation pour être au-dessus du dégradé dans le contexte 3D */}
         <div className="relative z-20 isolate">
           {/* Type Badge */}
-          <div className={cn('mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold uppercase', styles.badge)}>
+          <div className={cn(
+            'inline-block rounded-full font-bold uppercase',
+            compact ? 'mb-2 px-2 py-0.5 text-[10px]' : 'mb-4 px-3 py-1 text-xs',
+            styles.badge
+          )}>
             {title}
           </div>
 
           {/* Date */}
-          <div className="mb-2 text-2xl font-bold uppercase text-foreground">
+          <div className={cn(
+            'font-bold uppercase text-foreground',
+            compact ? 'mb-1 text-sm leading-tight' : 'mb-2 text-2xl'
+          )}>
             {date}
           </div>
 
           {/* Time */}
-          <div className={cn('mb-4 text-sm font-medium', styles.accent)}>
+          <div className={cn(
+            'font-medium',
+            compact ? 'mb-2 text-[10px]' : 'mb-4 text-sm',
+            styles.accent
+          )}>
             {time}
           </div>
 
           {/* Spots Remaining */}
-          <div className="mb-4 text-center">
-            <span className={cn('text-sm font-medium', spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground')}>
+          <div className={cn(
+            'text-center',
+            compact ? 'mb-2' : 'mb-4'
+          )}>
+            <span className={cn(
+              'font-medium',
+              compact ? 'text-[10px]' : 'text-sm',
+              spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground'
+            )}>
               Places restantes {spotsRemaining}/{totalSpots}
             </span>
           </div>
@@ -158,6 +187,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             size="sm"
             className={cn(
               'relative z-20 w-full border-racing-yellow/50',
+              compact && 'h-8 text-xs',
               comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow'
             )}
             disabled={spotsRemaining === 0 || comingSoon}

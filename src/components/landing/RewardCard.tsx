@@ -61,23 +61,23 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
-    
+
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    
+
     const mouseX = e.clientX - centerX;
     const mouseY = e.clientY - centerY;
-    
+
     const rotateXValue = (mouseY / (rect.height / 2)) * -15;
     const rotateYValue = (mouseX / (rect.width / 2)) * 15;
-    
+
     setRotateX(rotateXValue);
     setRotateY(rotateYValue);
   };
 
   const handleMouseEnter = () => setIsHovered(true);
-  
+
   const handleMouseLeave = () => {
     setRotateX(0);
     setRotateY(0);
@@ -112,7 +112,7 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
       >
         {/* Shimmer container - clipped to card bounds */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-          <div 
+          <div
             className={cn(
               'absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite]',
               styles.shimmer
@@ -120,7 +120,7 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
           />
         </div>
         {/* Noise Texture Overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none rounded-2xl"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
@@ -141,9 +141,9 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
         </div>
 
         {/* Rank Badge */}
-        <div 
+        <div
           className="absolute right-4 top-4 text-4xl z-20"
-          style={{ 
+          style={{
             transform: `translateZ(60px) rotateX(${imageRotateX}deg) rotateY(${imageRotateY}deg)`,
             filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
           }}
@@ -152,16 +152,16 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
         </div>
 
         {/* MAIN PRIZE IMAGE - Independent 3D */}
-        <div 
+        <div
           className="absolute -top-12 left-1/2 z-30 w-48 h-48 md:w-56 md:h-56"
-          style={{ 
+          style={{
             transform: `translateX(-50%) translateZ(80px) rotateX(${imageRotateX * 1.5}deg) rotateY(${imageRotateY * 1.5}deg) scale(${isHovered ? 1.15 : 1})`,
             transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
             transformStyle: 'preserve-3d',
           }}
         >
-          <img 
-            src={image} 
+          <img
+            src={image}
             alt={title}
             className={cn(
               'w-full h-full object-contain transition-all duration-500',
@@ -169,9 +169,9 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
               isHovered && 'animate-float'
             )}
           />
-          
+
           {/* Glow ring under image */}
-          <div 
+          <div
             className={cn(
               'absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-8 rounded-full blur-xl opacity-60 transition-opacity duration-300',
               index === 0 ? 'bg-yellow-400' : index === 1 ? 'bg-gray-400' : 'bg-orange-500',
@@ -182,14 +182,16 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col min-h-[140px]" style={{ transform: 'translateZ(10px)' }}>
+        <div className="relative z-10 flex flex-col" style={{ transform: 'translateZ(10px)' }}>
           <h3 className={cn('mb-2 text-xl font-bold uppercase text-center', styles.text)}>
             {title}
           </h3>
-          <p className={cn('mb-4 text-sm text-center min-h-[2.5rem] flex items-center justify-center', styles.textMuted)}>
-            {description || '\u00A0'}
-          </p>
-          
+          {description !== undefined && (
+            <p className={cn('mb-4 text-sm text-center min-h-[2.5rem] flex items-center justify-center', styles.textMuted)}>
+              {description || '\u00A0'}
+            </p>
+          )}
+
           {/* Value */}
           <div className={cn('text-4xl font-black tracking-tight text-center', styles.valueText)}>
             {value}

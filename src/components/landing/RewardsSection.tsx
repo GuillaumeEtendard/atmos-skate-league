@@ -11,18 +11,15 @@ import smileWorldPrize from '@/assets/smile-world-prize.png';
 import aslLogo from '@/assets/asl-logo-white.png';
 const rewards = [{
   title: 'Rollers Électriques Atmos',
-  description: '',
   value: '750€',
   image: rollerPrizeGold
 }, {
   title: 'Platines Atmos 4x80mm',
-  description: '',
   value: '150€',
   image: cinnarollPrize
 }, {
-  title: 'Partner Pack',
+  title: '2 sessions Karting offertes',
   value: '40€',
-  description: '2 sessions Karting offertes',
   image: smileWorldPrize
 }];
 const RewardsSection = () => {

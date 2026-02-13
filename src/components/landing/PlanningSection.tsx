@@ -1,8 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PlanningCard from './PlanningCard';
 import SectionTitle from './SectionTitle';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useDragScroll } from '@/hooks/use-drag-scroll';
 import { EVENTS } from '@/data/events';
 
 /** Plafond "places restantes" affiché : on affiche au plus ce nombre ; s'il en reste moins (plus d'inscrits), on affiche le nombre réel. */
@@ -13,10 +11,7 @@ const MAX_SPOTS_REMAINING_DISPLAYED: Record<string, number> = {
 };
 
 const PlanningSection = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
-  const drag = useDragScroll(sliderRef);
 
   useEffect(() => {
     const eventIds = EVENTS.map((e) => e.id).join(',');
@@ -39,76 +34,23 @@ const PlanningSection = () => {
     };
   });
 
-  const scrollToSlide = (index: number) => {
-    if (!sliderRef.current) return;
-    const cardWidth = 280 + 16; // card width + gap
-    sliderRef.current.scrollTo({ left: cardWidth * index, behavior: 'smooth' });
-  };
-
-  const goToPrev = () => {
-    const newIndex = activeIndex === 0 ? events.length - 1 : activeIndex - 1;
-    setActiveIndex(newIndex);
-    scrollToSlide(newIndex);
-  };
-
-  const goToNext = () => {
-    const newIndex = activeIndex === events.length - 1 ? 0 : activeIndex + 1;
-    setActiveIndex(newIndex);
-    scrollToSlide(newIndex);
-  };
-
-  const handleScroll = () => {
-    if (!sliderRef.current) return;
-    const cardWidth = 280 + 16;
-    const newIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
-    if (newIndex !== activeIndex && newIndex >= 0 && newIndex < events.length) {
-      setActiveIndex(newIndex);
-    }
-  };
-
   return (
     <section id="planning" className="section-container texture-overlay relative py-20 md:py-28">
       <div className="relative z-10 mx-auto max-w-7xl">
         <SectionTitle>PLANNING</SectionTitle>
 
-        {/* Desktop Grid / Mobile Slider */}
+        {/* Mobile: même taille de cartes qu'en carousel, 3 par ligne puis les 3 suivantes en dessous */}
         <div className="relative">
-          {/* Cards - Mobile Slider */}
-          <div
-            ref={sliderRef}
-            onScroll={handleScroll}
-            onPointerDown={drag.onPointerDown}
-            onPointerMove={drag.onPointerMove}
-            onPointerUp={drag.onPointerUp}
-            onPointerCancel={drag.onPointerCancel}
-            onPointerLeave={drag.onPointerLeave}
-            className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing"
-            style={{ WebkitOverflowScrolling: 'touch' }}
-          >
-            {events.map((event) => (
-              <div key={event.id} className="min-w-[280px] flex-shrink-0 snap-center">
-                <PlanningCard {...event} />
+          <div className="md:hidden flex flex-col gap-4 overflow-x-auto px-4 pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {Array.from({ length: Math.ceil(events.length / 3) }, (_, rowIndex) => (
+              <div key={rowIndex} className="flex gap-4 flex-shrink-0">
+                {events.slice(rowIndex * 3, rowIndex * 3 + 3).map((event) => (
+                  <div key={event.id} className="min-w-[280px] flex-shrink-0">
+                    <PlanningCard {...event} />
+                  </div>
+                ))}
               </div>
             ))}
-          </div>
-
-          {/* Mobile Navigation Buttons */}
-          <div className="md:hidden flex justify-center items-center gap-6 mt-6">
-            <button
-              onClick={goToPrev}
-              className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300"
-              aria-label="Slide précédente"
-            >
-              <ChevronLeft className="w-5 h-5 text-[#ffd600]" />
-            </button>
-            <span className="text-muted-foreground text-sm">{activeIndex + 1} / {events.length}</span>
-            <button
-              onClick={goToNext}
-              className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300"
-              aria-label="Slide suivante"
-            >
-              <ChevronRight className="w-5 h-5 text-[#ffd600]" />
-            </button>
           </div>
 
           {/* Desktop Grid */}

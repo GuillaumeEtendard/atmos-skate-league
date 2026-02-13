@@ -286,7 +286,7 @@ const EntryFeesSection = () => {
           onPointerUp={drag.onPointerUp}
           onPointerCancel={drag.onPointerCancel}
           onPointerLeave={drag.onPointerLeave}
-          className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing"
+          className="md:hidden scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 cursor-grab select-none active:cursor-grabbing overflow-y-hidden"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {jerseys.map((jersey, index) => (
