@@ -197,7 +197,7 @@ const RegistrationForm = () => {
           <Label htmlFor="jersey_size">Taille du maillot *</Label>
           <Select value={jerseySize} onValueChange={setJerseySize} required>
             <SelectTrigger id="jersey_size" className="bg-background/50">
-              <SelectValue placeholder="Sélectionne ta taille" />
+              <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent>
               {JERSEY_SIZES.map((size) => (

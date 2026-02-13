@@ -15,6 +15,13 @@ interface PlanningCardProps {
   comingSoon?: boolean;
 }
 
+const TYPE_LOGOS: Record<'king' | 'queen' | 'electric' | 'mixte', string> = {
+  king: '/atmos-uploads/king.png',
+  queen: '/atmos-uploads/queen.png',
+  electric: '/atmos-uploads/electric.png',
+  mixte: '/atmos-uploads/mixte.png',
+};
+
 const typeStyles = {
   king: {
     gradient: 'from-racing-yellow/20 to-transparent',
@@ -86,9 +93,18 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   return (
     <div
       ref={cardRef}
-      className="card-3d group min-w-[260px] md:min-w-0"
+      className="card-3d group relative min-w-[260px] md:min-w-0 overflow-visible"
       style={{ perspective: '1000px' }}
     >
+      {/* Logo type en haut à droite, débordant */}
+      <div className="absolute -top-2 -right-2 z-20 pointer-events-none">
+        <img
+          src={TYPE_LOGOS[type]}
+          alt=""
+          className="h-20 w-auto object-contain drop-shadow-lg md:h-24"
+        />
+      </div>
+
       <div
         className={cn(
           'relative overflow-hidden rounded-xl border bg-card p-6 transition-all duration-300',
@@ -142,7 +158,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             size="sm"
             className={cn(
               'relative z-20 w-full border-racing-yellow/50',
-              comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow/10'
+              comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow'
             )}
             disabled={spotsRemaining === 0 || comingSoon}
             onClick={handleRegistration}
