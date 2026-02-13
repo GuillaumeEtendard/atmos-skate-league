@@ -186,7 +186,7 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
           <h3 className={cn('mb-2 text-xl font-bold uppercase text-center', styles.text)}>
             {title}
           </h3>
-          <p className={cn('mb-4 text-sm text-center', styles.textMuted)}>{description}</p>
+          <p className={cn('mb-4 text-sm text-center', styles.textMuted)}>{description || }</p>
           
           {/* Value */}
           <div className={cn('text-4xl font-black tracking-tight text-center', styles.valueText)}>

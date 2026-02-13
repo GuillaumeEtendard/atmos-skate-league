@@ -10,19 +10,19 @@ import cinnarollPrize from '@/assets/cinnaroll-prize.png';
 import smileWorldPrize from '@/assets/smile-world-prize.png';
 import aslLogo from '@/assets/asl-logo-white.png';
 const rewards = [{
-  title: 'Electric Atmos Rollers',
+  title: 'Rollers Électriques Atmos',
+  description: '',
   value: '750€',
-  description: 'Rollers électriques haut de gamme Atmos',
   image: rollerPrizeGold
 }, {
-  title: 'Classic Atmos Rollers',
+  title: 'Platines Atmos 4x80mm',
+  description: '',
   value: '150€',
-  description: 'Rollers classiques de qualité professionnelle',
   image: cinnarollPrize
 }, {
   title: 'Partner Pack',
   value: '40€',
-  description: '2 sessions kart / drift bike pour 2 personnes',
+  description: '2 sessions Karting offertes',
   image: smileWorldPrize
 }];
 const RewardsSection = () => {
@@ -74,6 +74,46 @@ const RewardsSection = () => {
   return <section className="section-container texture-overlay overflow-visible pt-24 md:pt-28 pb-20 md:pb-28 relative">
       <div className="relative z-10">
         <SectionTitle>REWARDS</SectionTitle>
+
+
+        {/* Slider Container */}
+        <div className="relative">
+          {/* Cards Slider */}
+          <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-visible px-4 pt-16 pb-4 md:justify-center md:overflow-visible md:pt-0 cursor-grab select-none active:cursor-grabbing" style={{
+          WebkitOverflowScrolling: 'touch'
+        }}>
+            {rewards.map((reward, index) => <div key={reward.title} className="snap-center flex-shrink-0">
+                <RewardCard {...reward} index={index} />
+              </div>)}
+          </div>
+
+          {/* Mobile Navigation Buttons */}
+          <div className="md:hidden flex justify-center items-center gap-6 mt-6">
+            <button onClick={goToPrev} className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300" aria-label="Slide précédente">
+              <ChevronLeft className="w-5 h-5 text-[#ffd600]" />
+            </button>
+            <span className="text-muted-foreground text-sm">{activeIndex + 1} / {rewards.length}</span>
+            <button onClick={goToNext} className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300" aria-label="Slide suivante">
+              <ChevronRight className="w-5 h-5 text-[#ffd600]" />
+            </button>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex justify-center items-center gap-6 mt-8">
+            <button onClick={goToPrev} className="p-3 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300 group" aria-label="Slide précédente">
+              <ChevronLeft className="w-6 h-6 text-[#ffd600] group-hover:scale-110 transition-transform" />
+            </button>
+            
+            {/* Dots */}
+            <div className="flex gap-3">
+              {rewards.map((_, index) => <button key={index} onClick={() => goToIndex(index)} className={`h-2 w-8 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-gradient-to-r from-[#ffd600] to-[#ffaa00] shadow-[0_0_10px_#ffd600]' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'}`} aria-label={`Go to reward ${index + 1}`} />)}
+            </div>
+
+            <button onClick={goToNext} className="p-3 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300 group" aria-label="Slide suivante">
+              <ChevronRight className="w-6 h-6 text-[#ffd600] group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
+        </div>
 
         {/* Featured ASL Card - Main Reward */}
         <div className="mb-8 md:mb-16 -mt-4">
@@ -145,51 +185,6 @@ const RewardsSection = () => {
           </div>
         </div>
 
-        {/* Intro Text for existing rewards */}
-        <div className="mb-12 md:mb-16 text-center max-w-2xl mx-auto">
-          <p className="text-base md:text-xl text-foreground/80 text-pretty">
-            …et leurs récompenses selon leur place au classement. <span className="font-bold text-[#ffd600]">AtmosGear</span> t'ouvre la voie vers l'<span className="font-bold text-[#ffd600]">Atmos Skate League</span> !
-          </p>
-        </div>
-
-        {/* Slider Container */}
-        <div className="relative">
-          {/* Cards Slider */}
-          <div ref={sliderRef} onScroll={handleScroll} onPointerDown={drag.onPointerDown} onPointerMove={drag.onPointerMove} onPointerUp={drag.onPointerUp} onPointerCancel={drag.onPointerCancel} onPointerLeave={drag.onPointerLeave} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-visible px-4 pt-16 pb-4 md:justify-center md:overflow-visible md:pt-0 cursor-grab select-none active:cursor-grabbing" style={{
-          WebkitOverflowScrolling: 'touch'
-        }}>
-            {rewards.map((reward, index) => <div key={reward.title} className="snap-center flex-shrink-0">
-                <RewardCard {...reward} index={index} />
-              </div>)}
-          </div>
-
-          {/* Mobile Navigation Buttons */}
-          <div className="md:hidden flex justify-center items-center gap-6 mt-6">
-            <button onClick={goToPrev} className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300" aria-label="Slide précédente">
-              <ChevronLeft className="w-5 h-5 text-[#ffd600]" />
-            </button>
-            <span className="text-muted-foreground text-sm">{activeIndex + 1} / {rewards.length}</span>
-            <button onClick={goToNext} className="p-2 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300" aria-label="Slide suivante">
-              <ChevronRight className="w-5 h-5 text-[#ffd600]" />
-            </button>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex justify-center items-center gap-6 mt-8">
-            <button onClick={goToPrev} className="p-3 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300 group" aria-label="Slide précédente">
-              <ChevronLeft className="w-6 h-6 text-[#ffd600] group-hover:scale-110 transition-transform" />
-            </button>
-            
-            {/* Dots */}
-            <div className="flex gap-3">
-              {rewards.map((_, index) => <button key={index} onClick={() => goToIndex(index)} className={`h-2 w-8 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-gradient-to-r from-[#ffd600] to-[#ffaa00] shadow-[0_0_10px_#ffd600]' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'}`} aria-label={`Go to reward ${index + 1}`} />)}
-            </div>
-
-            <button onClick={goToNext} className="p-3 rounded-full border border-[#ffd600]/30 bg-black/50 backdrop-blur-sm hover:bg-[#ffd600]/10 hover:border-[#ffd600]/60 transition-all duration-300 group" aria-label="Slide suivante">
-              <ChevronRight className="w-6 h-6 text-[#ffd600] group-hover:scale-110 transition-transform" />
-            </button>
-          </div>
-        </div>
 
         {/* CTA Button */}
         <div className="mt-12 text-center">

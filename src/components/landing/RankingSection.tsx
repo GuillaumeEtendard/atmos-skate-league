@@ -5,36 +5,26 @@ import PodiumCard from './PodiumCard';
 import SectionTitle from './SectionTitle';
 
 const rankings = {
-  general: [
-    { rank: 1, name: 'Alex Thunder', points: 2450, team: 'Speed Demons' },
-    { rank: 2, name: 'Max Velocity', points: 2280, team: 'Velocity Crew' },
-    { rank: 3, name: 'Sam Storm', points: 2150, team: 'Storm Riders' },
-    { rank: 4, name: 'Jordan Blaze', points: 1980, team: 'Blaze Squad' },
-    { rank: 5, name: 'Taylor Swift', points: 1850, team: 'Swift Force' },
-    { rank: 6, name: 'Casey Flash', points: 1720, team: 'Flash Team' },
-    { rank: 7, name: 'Morgan Drift', points: 1650, team: 'Drift Kings' },
-    { rank: 8, name: 'Riley Rush', points: 1580, team: 'Rush Hour' },
-  ],
   course: [
-    { rank: 1, name: 'Max Velocity', points: 850, team: 'Velocity Crew' },
-    { rank: 2, name: 'Alex Thunder', points: 780, team: 'Speed Demons' },
-    { rank: 3, name: 'Jordan Blaze', points: 720, team: 'Blaze Squad' },
+    { rank: 1, name: '—', points: 0, team: 'À venir' },
+    { rank: 2, name: '—', points: 0, team: 'À venir' },
+    { rank: 3, name: '—', points: 0, team: 'À venir' },
   ],
   team: [
-    { rank: 1, name: 'Speed Demons', points: 4580, team: '' },
-    { rank: 2, name: 'Velocity Crew', points: 4320, team: '' },
-    { rank: 3, name: 'Storm Riders', points: 3950, team: '' },
+    { rank: 1, name: 'Black Night', points: 0, team: '' },
+    { rank: 2, name: 'White Sky', points: 0, team: '' },
+    { rank: 3, name: 'Yellow Thunder', points: 0, team: '' },
   ],
 };
 
 const podiumData = [
-  { rank: 1, name: 'Alex Thunder', points: 2450, maxSpeed: '42 km/h', chrono: '1:23.45', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face' },
-  { rank: 2, name: 'Max Velocity', points: 2280, maxSpeed: '41 km/h', chrono: '1:24.12', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face' },
-  { rank: 3, name: 'Sam Storm', points: 2150, maxSpeed: '39 km/h', chrono: '1:25.88', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face' },
+  { rank: 1, name: '1er — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face' },
+  { rank: 2, name: '2e — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face' },
+  { rank: 3, name: '3e — À venir', points: 0, maxSpeed: '—', chrono: '—', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face' },
 ];
 
 const RankingSection = () => {
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState('course');
   const [activeCard, setActiveCard] = useState(0);
 
   const handlePrev = () => {
@@ -55,13 +45,7 @@ const RankingSection = () => {
           {/* Left: Ranking Table */}
           <div className="relative">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-6 grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm relative z-10">
-                <TabsTrigger
-                  value="general"
-                  className="data-[state=active]:bg-[#ffd600] data-[state=active]:text-primary-foreground uppercase text-sm font-semibold"
-                >
-                  Général
-                </TabsTrigger>
+              <TabsList className="mb-6 grid w-full grid-cols-2 bg-muted/50 backdrop-blur-sm relative z-10">
                 <TabsTrigger
                   value="course"
                   className="data-[state=active]:bg-[#ffd600] data-[state=active]:text-primary-foreground uppercase text-sm font-semibold"

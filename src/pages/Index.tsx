@@ -50,21 +50,21 @@ const Index = () => {
         <LeagueFormatSection />
         
         <EventExplanation />
+        <LocationSection />
         <PlanningSection />
         <EntryFeesSection />
-        <HighlightsSection />
+        {false && <HighlightsSection />}
         <RewardsSection />
         <TeamSection />
         <SloganCTA />
         <RankingSection />
         <ReplaySection />
-        <LocationSection />
-        <CommunitySection />
+        {false && <CommunitySection />}
         
         {/* Footer */}
         <footer className="border-t border-border/50 py-8 text-center backdrop-blur-sm">
           <p className="text-sm text-muted-foreground">
-            © 2025 King of the Road. Tous droits réservés.
+            © 2026 Atmos Skate League by AtmosGear. Tous droits réservés.
           </p>
         </footer>
       </div>
