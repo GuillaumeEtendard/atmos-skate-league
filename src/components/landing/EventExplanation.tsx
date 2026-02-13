@@ -17,6 +17,8 @@ interface FormatBlockProps {
   className?: string;
   image?: string;
   imageSize?: 'normal' | 'large';
+  /** Réduit la hauteur (padding + image) pour Mixte / Atmos Riders */
+  compact?: boolean;
 }
 const typeStyles = {
   king: {
@@ -51,11 +53,23 @@ const FormatBlock = ({
   hasElectricEffect = false,
   className,
   image,
-  imageSize = 'normal'
+  imageSize = 'normal',
+  compact = false
 }: FormatBlockProps) => {
   const styles = typeStyles[type];
-  const imageSizeClasses = imageSize === 'large' ? 'w-40 h-40 md:w-48 md:h-48' : 'w-28 h-28 md:w-32 md:h-32';
-  return <div className={cn('group relative flex flex-col rounded-xl border bg-card p-5 md:p-8 text-center h-full transition-all duration-300', styles.border, styles.glow, className)}>
+  const imageSizeClasses = compact
+    ? 'w-24 h-24 md:w-28 md:h-28'
+    : imageSize === 'large'
+      ? 'w-40 h-40 md:w-48 md:h-48'
+      : 'w-28 h-28 md:w-32 md:h-32';
+  return <div className={cn(
+    'group relative flex flex-col rounded-xl border bg-card text-center transition-all duration-300',
+    compact ? 'p-3 md:p-5' : 'p-5 md:p-8',
+    'h-full',
+    styles.border,
+    styles.glow,
+    className
+  )}>
       {/* Background Gradient */}
       <div className={cn('absolute inset-0 rounded-xl bg-gradient-to-t opacity-50', styles.gradient)} />
 
@@ -168,19 +182,19 @@ const FormatBlock = ({
         </>}
 
       {/* Square Image Holder */}
-      <div className={`relative z-10 mx-auto mb-4 flex items-center justify-center overflow-hidden ${imageSizeClasses}`}>
+      <div className={cn('relative z-10 mx-auto flex items-center justify-center overflow-hidden', compact ? 'mb-2' : 'mb-4', imageSizeClasses)}>
         {image ? <img src={image} alt={title} className="w-full h-full object-contain" /> : <span className="text-muted-foreground text-xs uppercase tracking-wider opacity-50">Image</span>}
       </div>
 
       {/* Title */}
-      <h3 className="relative z-10 text-xl md:text-2xl font-bold uppercase tracking-wide mb-4" style={{
+      <h3 className={cn('relative z-10 font-bold uppercase tracking-wide', compact ? 'text-base md:text-lg mb-2' : 'text-xl md:text-2xl mb-4')} style={{
       color: styles.accent
     }}>
         {title}
       </h3>
 
       {/* Body Content */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center space-y-3 text-sm md:text-base leading-relaxed text-foreground/80">
+      <div className={cn('relative z-10 flex-1 flex flex-col justify-center leading-relaxed text-foreground/80', compact ? 'space-y-1.5 text-xs md:text-sm' : 'space-y-3 text-sm md:text-base')}>
         {children}
       </div>
     </div>;
@@ -271,12 +285,12 @@ const EventExplanation = () => {
 
           {/* Block 3 + 4 sur mobile : Course Mixte et Atmos Riders un en dessous de l'autre */}
           <div className="min-w-[85vw] max-w-[320px] flex-shrink-0 snap-center flex flex-col gap-4">
-            <FormatBlock title="COURSE MIXTE" type="mixte" image={mixteVsLogo} imageSize="large">
+            <FormatBlock title="COURSE MIXTE" type="mixte" image={mixteVsLogo} compact>
               <p>
                 Ouverte à toutes et tous, sans distinction de genre !
               </p>
             </FormatBlock>
-            <FormatBlock title="ATMOS RIDERS" type="electric" hasElectricEffect image={atmosElectricLogo} imageSize="large">
+            <FormatBlock title="ATMOS RIDERS" type="electric" hasElectricEffect image={atmosElectricLogo} compact>
               <p>
                 Course exclusive en Rollers électriques pour nos clients !
               </p>
@@ -326,14 +340,14 @@ const EventExplanation = () => {
           {/* Right column: Course Mixte + Atmos Riders stacked */}
           <div className="flex flex-col gap-4">
             {/* Block 3: Course Mixte */}
-            <FormatBlock title="COURSE MIXTE" type="mixte" image={mixteVsLogo}>
+            <FormatBlock title="COURSE MIXTE" type="mixte" image={mixteVsLogo} compact>
               <p>
                 Ouverte à toutes et tous, sans distinction de genre !
               </p>
             </FormatBlock>
 
             {/* Block 4: Atmos Riders */}
-            <FormatBlock title="ATMOS RIDERS" type="electric" hasElectricEffect image={atmosElectricLogo}>
+            <FormatBlock title="ATMOS RIDERS" type="electric" hasElectricEffect image={atmosElectricLogo} compact>
               <p>
                 Course exclusive en Rollers électriques pour nos clients !
               </p>
