@@ -156,15 +156,12 @@ const TeamSection = () => {
   return (
     <section className="py-20 md:py-28 px-4">
       <div className="container mx-auto max-w-6xl">
-        <SectionTitle>Teams</SectionTitle>
+        <SectionTitle>Les Équipes</SectionTitle>
         
         {/* Explanatory Text */}
         <div className="text-center mt-6 mb-12 md:mb-16 max-w-2xl mx-auto space-y-3">
           <p className="text-base md:text-xl text-muted-foreground leading-relaxed text-pretty">
-            À chaque course, seuls les <span className="font-bold text-[#ffd600]">3 meilleurs</span> gagnent leur place pour l'<span className="font-bold text-[#ffd600]">event</span> de fin de saison.
-          </p>
-          <p className="text-base md:text-xl text-muted-foreground leading-relaxed text-pretty">
-            Le <span className="font-bold text-[#ffd600]">1er</span> choisit sa team, le <span className="font-bold text-[#ffd600]">2e</span> choisit parmi les restantes, le <span className="font-bold text-[#ffd600]">3e</span> prend la dernière.
+            En remportant le tournoi, vous pourrez choisir l'équipe que vous voulez integrer pour la Ligue: Black NIGHT, White SKY ou Yellow THUNDER.
           </p>
         </div>
 

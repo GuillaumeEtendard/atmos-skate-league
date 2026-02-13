@@ -11,6 +11,7 @@ import SloganCTA from '@/components/landing/SloganCTA';
 import RankingSection from '@/components/landing/RankingSection';
 import ReplaySection from '@/components/landing/ReplaySection';
 import LocationSection from '@/components/landing/LocationSection';
+import BackToTop from '@/components/landing/BackToTop';
 import CommunitySection from '@/components/landing/CommunitySection';
 
 const Index = () => {
@@ -76,6 +77,8 @@ const Index = () => {
             © 2026 Atmos Skate League by AtmosGear. Tous droits réservés.
           </p>
         </footer>
+
+        <BackToTop />
       </div>
     </div>
   );

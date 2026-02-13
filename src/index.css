@@ -181,7 +181,7 @@
   }
 
   .animate-float {
-    animation: float 10s ease-in-out infinite;
+    animation: float 25s ease-in-out infinite !important;
     will-change: transform;
   }
 
