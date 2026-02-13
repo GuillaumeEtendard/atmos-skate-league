@@ -37,7 +37,7 @@ The complete registration flow has been reviewed, tested, and optimized. Several
   - Shows selected event with color-coded badge
   - If no event selected: Shows informative message with "Choose a slot" button
   - Creates PaymentIntent via `/api/create-payment-intent` (35€)
-  - Collects: name, email, phone, gender (all required)
+  - Collects: name, email, phone (all required), plus maillot and taille
 - **Files:**
   - `Registration.tsx`
   - `RegistrationForm.tsx`
@@ -48,7 +48,7 @@ The complete registration flow has been reviewed, tested, and optimized. Several
 - **Data passed:**
   - `payment_intent`
   - `redirect_status`
-  - `name`, `email`, `phone`, `gender`
+  - `name`, `email`, `phone`
   - `event_id` (optional)
 - **Files:**
   - `RegistrationForm.tsx`
@@ -81,7 +81,7 @@ The complete registration flow has been reviewed, tested, and optimized. Several
 - **Security:** Row Level Security (RLS) enabled
 - **Migrations:**
   - `001_create_participants.sql` - Initial table
-  - `002_add_gender_field.sql` - Gender field
+  - `002_add_gender_field.sql` (legacy; gender removed in 005)
   - `003_add_event_id_field.sql` - Event slot tracking
 
 ---
@@ -122,9 +122,9 @@ The complete registration flow has been reviewed, tested, and optimized. Several
 **Status:** ✅ FIXED
 
 ### 🟢 LOW - Documentation Inconsistencies
-**Problem:** Doc referred to `SUPABASE_SERVICE_ROLE_KEY` but code uses `SUPABASE_SECRET_KEY`
-**Impact:** Configuration errors for users following docs
-**Fix:** Updated `SUPABASE_SETUP.md` with correct variable names
+**Problem:** Doc had referred to `SUPABASE_SERVICE_ROLE_KEY` while code uses `SUPABASE_SECRET_KEY`.
+**Impact:** Configuration errors for users following docs.
+**Fix:** Standardized on `SUPABASE_SECRET_KEY` everywhere: `SUPABASE_SETUP.md`, `.env.example`, and API code (`register-participant.ts`, `get-participant-counts.ts`) all use `SUPABASE_SECRET_KEY`. No references to `SUPABASE_SERVICE_ROLE_KEY` remain.
 **Status:** ✅ FIXED
 
 ---
@@ -162,7 +162,7 @@ User → Landing Page
   Registration Page:
     - Creates PaymentIntent (35€)
     - Displays Event Info (if selected)
-    - Shows Form (name, email, phone, gender)
+    - Shows Form (name, email, phone, maillot, taille)
   ↓
   User Fills Form + Confirms Payment
   ↓

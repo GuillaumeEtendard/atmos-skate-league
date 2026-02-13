@@ -37,7 +37,6 @@ const RegistrationForm = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [gender, setGender] = useState('');
   const [jersey, setJersey] = useState<string>('');
   const [jerseySize, setJerseySize] = useState<string>('');
 
@@ -49,7 +48,7 @@ const RegistrationForm = () => {
     }
 
     // Validation basique
-    if (!email || !name || !phone || !gender || !jersey || !jerseySize) {
+    if (!email || !name || !phone || !jersey || !jerseySize) {
       toast({
         title: 'Erreur',
         description: 'Veuillez remplir tous les champs obligatoires, choisir un maillot et une taille',
@@ -69,7 +68,6 @@ const RegistrationForm = () => {
       returnUrl.searchParams.set('name', name);
       returnUrl.searchParams.set('email', email);
       returnUrl.searchParams.set('phone', phone);
-      returnUrl.searchParams.set('gender', gender);
       returnUrl.searchParams.set('jersey', jersey);
       returnUrl.searchParams.set('jersey_size', jerseySize);
 
@@ -149,19 +147,6 @@ const RegistrationForm = () => {
             required
             className="bg-background/50"
           />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="gender">Sexe *</Label>
-          <Select value={gender} onValueChange={setGender} required>
-            <SelectTrigger className="bg-background/50">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Homme</SelectItem>
-              <SelectItem value="female">Femme</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="space-y-3">

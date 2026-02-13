@@ -23,17 +23,19 @@ URL : https://supabase.com/dashboard/project/hrughgshjjaewouqfpdo
 2. **Créez une nouvelle query**
 3. **Copiez-collez** le contenu des fichiers suivants **dans l'ordre** :
    - `supabase/migrations/001_create_participants.sql`
-   - `supabase/migrations/002_add_gender_field.sql` (ajoute le champ sexe)
+   - `supabase/migrations/002_add_gender_field.sql`
    - `supabase/migrations/003_add_event_id_field.sql` (ajoute le créneau sélectionné)
-   - `supabase/migrations/004_add_jersey_and_jersey_size.sql` (maillot : black-night, white-sky, yellow-thunder + taille S, M, L, XL)
+   - `supabase/migrations/004_add_jersey_and_jersey_size.sql` (maillot + taille S, M, L, XL)
+   - `supabase/migrations/005_remove_gender_column.sql` (supprime le champ sexe)
 4. **Exécutez** chaque query (bouton "RUN" ou Ctrl/Cmd + Enter)
 
 **Alternative** : si le projet est lié au CLI Supabase (`supabase link`), exécutez `supabase db push` pour appliquer toutes les migrations.
 
 Les scripts vont créer :
-- ✅ Table `participants` avec tous les champs nécessaires (nom, email, téléphone, sexe)
+- ✅ Table `participants` avec tous les champs nécessaires (nom, email, téléphone)
 - ✅ Champ `event_id` pour stocker le créneau/événement sélectionné
 - ✅ Champs `jersey` (black-night, white-sky, yellow-thunder) et `jersey_size` (S, M, L, XL)
+- ✅ Pas de champ sexe/genre (supprimé par la migration 005)
 - ✅ Index pour optimiser les recherches
 - ✅ Row Level Security (RLS) activé
 - ✅ Politiques de sécurité
@@ -90,8 +92,9 @@ Dans le dashboard Vercel :
 | `name` | VARCHAR(255) | Nom complet du participant |
 | `email` | VARCHAR(255) | Email du participant |
 | `phone` | VARCHAR(50) | Numéro de téléphone |
-| `gender` | VARCHAR(10) | Sexe (male ou female) |
 | `event_id` | VARCHAR(100) | Créneau/événement sélectionné (optionnel) |
+| `jersey` | VARCHAR(50) | Maillot (black-night, white-sky, yellow-thunder) |
+| `jersey_size` | VARCHAR(5) | Taille (S, M, L, XL) |
 | `payment_intent_id` | VARCHAR(255) | ID Stripe (unique) |
 | `amount` | DECIMAL(10,2) | Montant payé en euros |
 | `currency` | VARCHAR(3) | Devise (eur) |

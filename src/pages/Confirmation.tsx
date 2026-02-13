@@ -15,7 +15,6 @@ const Confirmation = () => {
     const name = searchParams.get('name');
     const email = searchParams.get('email');
     const phone = searchParams.get('phone');
-    const gender = searchParams.get('gender');
     const jersey = searchParams.get('jersey');
     const jerseySize = searchParams.get('jersey_size');
     const eventId = searchParams.get('event_id');
@@ -26,7 +25,7 @@ const Confirmation = () => {
     }
 
     // Vérifier que les champs requis sont présents
-    if (!name || !email || !phone || !gender) {
+    if (!name || !email || !phone) {
       console.error('Missing required fields in URL params');
       setStatus('error');
       return;
@@ -50,7 +49,6 @@ const Confirmation = () => {
           name,
           email,
           phone,
-          gender,
           jersey: jersey || undefined,
           jersey_size: jerseySize || undefined,
           eventId,

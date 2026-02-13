@@ -33,19 +33,12 @@ export default async function handler(
   }
 
   try {
-    const { paymentIntent, name, email, phone, gender, jersey, jersey_size: jerseySize, eventId } = req.body;
+    const { paymentIntent, name, email, phone, jersey, jersey_size: jerseySize, eventId } = req.body;
 
     // Vérifier que tous les champs requis sont présents
-    if (!paymentIntent || !name || !email || !phone || !gender) {
+    if (!paymentIntent || !name || !email || !phone) {
       return res.status(400).json({
-        error: 'Missing required fields: paymentIntent, name, email, phone, gender',
-      });
-    }
-
-    // Valider le genre
-    if (gender !== 'male' && gender !== 'female') {
-      return res.status(400).json({
-        error: 'Invalid gender value. Must be "male" or "female"',
+        error: 'Missing required fields: paymentIntent, name, email, phone',
       });
     }
 
@@ -63,7 +56,6 @@ export default async function handler(
       name,
       email,
       phone,
-      gender,
       payment_intent_id: paymentIntent,
       amount: intent.amount / 100, // Convertir en euros
       currency: intent.currency,
