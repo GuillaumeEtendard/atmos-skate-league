@@ -116,7 +116,7 @@ const RewardsSection = () => {
         </div>
 
         {/* Featured ASL Card - Main Reward */}
-        <div className="mb-8 md:mb-16 -mt-4">
+        <div className="mb-8 md:mb-16 mt-16">
           {/* Title above the featured card */}
           <h3 className="text-xl md:text-3xl font-bold text-center mb-6 md:mb-8 uppercase tracking-wide">
             <span className="text-gradient-yellow drop-shadow-[0_0_20px_hsl(45_100%_50%/0.4)]">
