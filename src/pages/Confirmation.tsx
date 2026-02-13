@@ -121,17 +121,18 @@ const Confirmation = () => {
                 </motion.div>
                 <h1 className="text-3xl font-bold mb-2 text-[#ffd600]">Inscription réussie !</h1>
                 <p className="text-muted-foreground mb-6">
-                  Merci pour votre inscription à l'Atmos Skate League. Un email de confirmation a été envoyé à votre adresse.
+                  Merci pour ton inscription à l'Atmos Skate League. 
                 </p>
                 <div className="space-y-4">
+                  {true && (
                   <div className="bg-[#ffd600]/10 border border-[#ffd600]/30 rounded-lg p-4">
                     <h3 className="font-semibold mb-2 text-[#ffd600]">Prochaines étapes</h3>
                     <ul className="text-sm text-left space-y-2 text-muted-foreground">
-                      <li>✅ Consultez votre email pour les détails de votre inscription</li>
-                      <li>✅ Préparez votre équipement de roller</li>
-                      <li>✅ Rejoignez notre communauté sur les réseaux sociaux</li>
+                      <li>✅ Préparez toi pour la course !</li>
+                      <li>✅ Rejoins nous sur les réseaux sociaux</li>
                     </ul>
                   </div>
+                  )}
                   <Button
                     onClick={() => navigate('/')}
                     className="w-full bg-[#ffd600] hover:bg-[#ffd600]/90 text-black font-semibold"
