@@ -182,11 +182,13 @@ const RewardCard = ({ title, value, description, index, image }: RewardCardProps
         </div>
 
         {/* Content */}
-        <div className="relative z-10" style={{ transform: 'translateZ(10px)' }}>
+        <div className="relative z-10 flex flex-col min-h-[140px]" style={{ transform: 'translateZ(10px)' }}>
           <h3 className={cn('mb-2 text-xl font-bold uppercase text-center', styles.text)}>
             {title}
           </h3>
-          <p className={cn('mb-4 text-sm text-center', styles.textMuted)}>{description || }</p>
+          <p className={cn('mb-4 text-sm text-center min-h-[2.5rem] flex items-center justify-center', styles.textMuted)}>
+            {description || '\u00A0'}
+          </p>
           
           {/* Value */}
           <div className={cn('text-4xl font-black tracking-tight text-center', styles.valueText)}>
