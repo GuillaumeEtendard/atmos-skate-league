@@ -14,7 +14,7 @@ export interface EventItem {
 
 export const EVENTS: EventItem[] = [
   { id: 'king-15-mars', date: 'DIMANCHE 15 MARS', time: '18H00 / 20H00', title: 'King of the Road', type: 'king', totalSpots: TOTAL_SPOTS, comingSoon: false },
-  { id: 'king-11-avril', date: 'SAMEDI 11 AVRIL', time: '19h30 / 21h30', title: 'King of the Road', type: 'king', totalSpots: TOTAL_SPOTS, comingSoon: true },
+  { id: 'king-11-avril', date: 'SAMEDI 11 AVRIL', time: '19h30 / 21h30', title: 'King of the Road', type: 'king', totalSpots: TOTAL_SPOTS, comingSoon: false },
   { id: 'electric-9-mai', date: 'SAMEDI 9 MAI', time: '19h30 / 21h30', title: 'Électrique', type: 'electric', totalSpots: TOTAL_SPOTS, comingSoon: false },
   { id: 'queen-28-mars', date: 'SAMEDI 28 MARS', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen', totalSpots: TOTAL_SPOTS, comingSoon: false },
   { id: 'queen-25-avril', date: 'SAMEDI 25 AVRIL', time: '19h30 / 21h30', title: 'Queen of the Road', type: 'queen', totalSpots: TOTAL_SPOTS, comingSoon: true },
