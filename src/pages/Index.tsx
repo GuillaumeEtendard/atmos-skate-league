@@ -57,7 +57,7 @@ const Index = () => {
       {/* Content */}
       <div className="relative z-10">
         <HeroVideo />
-        <LeagueFormatSection />
+        {false && <LeagueFormatSection />}
         
         <EventExplanation />
         <LocationSection />

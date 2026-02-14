@@ -35,7 +35,7 @@ const slides: Slide[] = [
     title: "Un nouveau sport",
     text: [
       "En 2026, AtmosGear va créer le Rollerball en vrai.",
-      "Un genre de Rollerderby bousté avec un ballon et 4 équipes qui s'affrontent en Roller électriques. Devant 2000 personnes en physique et 100 000 en live sur Twitch.",
+      "Un genre de Rollerderby boosté avec un ballon et 4 équipes qui s'affrontent en Roller électriques. Devant 2000 personnes en physique et 100 000 en live sur Twitch.",
       "Le but ? Remettre le Roller au sommet et offrir à la communauté un vrai événement spectaculaire !"
     ],
     bgColor: "#232323",
