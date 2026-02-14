@@ -7,6 +7,7 @@ import { EventSlotProvider } from "./contexts/EventSlotContext";
 import Index from "./pages/Index";
 import Registration from "./pages/Registration";
 import Confirmation from "./pages/Confirmation";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/inscription" element={<Registration />} />
             <Route path="/inscription/:eventId" element={<Registration />} />
             <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
