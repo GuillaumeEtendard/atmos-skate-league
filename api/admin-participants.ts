@@ -34,6 +34,7 @@ export default async function handler(
     const { data: rows, error } = await supabase
       .from('participants')
       .select('id, name, email, phone, event_id, jersey, jersey_size, status, registered_at, amount')
+      .neq('status', 'canceled')
       .order('registered_at', { ascending: true });
 
     if (error) {
