@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { sendRegistrationConfirmationEmail } from './lib/email';
+import { sendRegistrationConfirmationEmail } from './lib/email.js';
 
 // Initialiser Stripe avec votre clé secrète
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
