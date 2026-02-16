@@ -16,6 +16,16 @@ function getApiKey(): string {
   }
   return key;
 }
+
+/** "DIMANCHE 15 MARS" → "Dimanche 15 Mars" */
+function toTitleCase(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 export interface RegistrationEmailData {
   customerName: string;
   customerEmail: string;
@@ -35,7 +45,7 @@ export async function sendRegistrationConfirmationEmail(
   try {
     const params: Record<string, string> = {};
     if (data.creneau) params.creneau = data.creneau;
-    if (data.date) params.date = data.date;
+    if (data.date) params.date = toTitleCase(data.date);
 
     const requestBody = {
       to: [
