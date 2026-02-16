@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { sendRegistrationConfirmationEmail } from '../lib/email';
 
 // Initialiser Stripe avec votre clé secrète
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -33,7 +34,7 @@ export default async function handler(
   }
 
   try {
-    const { paymentIntent, name, email, phone, jersey, jersey_size: jerseySize, eventId } = req.body;
+    const { paymentIntent, name, email, phone, jersey, jersey_size: jerseySize, eventId, eventLabel, creneau, date } = req.body;
 
     // Vérifier que tous les champs requis sont présents
     if (!paymentIntent || !name || !email || !phone) {
@@ -95,8 +96,31 @@ export default async function handler(
 
     console.log('New participant registered:', participant);
 
-    // TODO: Envoyer un email de confirmation au participant
-    // Vous pouvez utiliser un service comme Resend ou SendGrid
+    // Envoyer l'email de confirmation (Brevo) et marquer confirmation_email_sent
+    if (process.env.BREVO_API_KEY) {
+      try {
+        const emailResult = await sendRegistrationConfirmationEmail({
+          customerName: name,
+          customerEmail: email,
+          creneau: creneau || undefined,
+          date: date || undefined,
+        });
+        if (emailResult.success) {
+          await supabase
+            .from('participants')
+            .update({
+              confirmation_email_sent: true,
+              confirmation_email_sent_at: new Date().toISOString(),
+            })
+            .eq('id', participant.id);
+        } else {
+          console.warn('Registration confirmation email failed:', emailResult.error);
+        }
+      } catch (emailError) {
+        console.warn('Registration confirmation email error:', emailError);
+        // Ne pas faire échouer l'inscription si l'email échoue
+      }
+    }
 
     // Retourner une réponse de succès
     res.status(200).json({

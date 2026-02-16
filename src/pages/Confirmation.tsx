@@ -18,6 +18,9 @@ const Confirmation = () => {
     const jersey = searchParams.get('jersey');
     const jerseySize = searchParams.get('jersey_size');
     const eventId = searchParams.get('event_id');
+    const eventLabel = searchParams.get('event_label');
+    const creneau = searchParams.get('creneau');
+    const date = searchParams.get('date');
 
     if (!paymentIntent) {
       setStatus('error');
@@ -52,6 +55,9 @@ const Confirmation = () => {
           jersey: jersey || undefined,
           jersey_size: jerseySize || undefined,
           eventId,
+          eventLabel: eventLabel || undefined,
+          creneau: creneau || undefined,
+          date: date || undefined,
         }),
       })
         .then((res) => {

@@ -17,6 +17,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useEventSlot } from '@/contexts/EventSlotContext';
+import { getEventById } from '@/data/events';
 import { cn } from '@/lib/utils';
 
 const JERSEY_OPTIONS = [
@@ -64,6 +65,12 @@ const RegistrationForm = () => {
       const returnUrl = new URL(`${window.location.origin}/confirmation`);
       if (selectedSlot) {
         returnUrl.searchParams.set('event_id', selectedSlot.id);
+        const event = getEventById(selectedSlot.id);
+        if (event) {
+          returnUrl.searchParams.set('event_label', `${event.title} – ${event.date}`);
+          returnUrl.searchParams.set('creneau', event.title);
+          returnUrl.searchParams.set('date', event.date);
+        }
       }
       returnUrl.searchParams.set('name', name);
       returnUrl.searchParams.set('email', email);

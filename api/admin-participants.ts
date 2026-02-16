@@ -33,7 +33,7 @@ export default async function handler(
   try {
     const { data: rows, error } = await supabase
       .from('participants')
-      .select('id, name, email, phone, event_id, jersey, jersey_size, status, registered_at, amount')
+      .select('id, name, email, phone, event_id, jersey, jersey_size, status, registered_at, amount, confirmation_email_sent, confirmation_email_sent_at')
       .neq('status', 'canceled')
       .order('registered_at', { ascending: true });
 
