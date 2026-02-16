@@ -1,7 +1,9 @@
 /**
  * Envoi d'emails via Brevo (league.atmosgear.com - Atmos Skate League)
  * Template Brevo : https://app.brevo.com/templates/email/edit/42
+ * Ce fichier est un module partagé par les routes API ; le default export évite une route publique.
  */
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const FROM_EMAIL = 'noreply@mail.atmosgear.com';
@@ -68,4 +70,8 @@ export async function sendRegistrationConfirmationEmail(
     console.error('sendRegistrationConfirmationEmail error:', error);
     return { success: false, error };
   }
+}
+
+export default function handler(_req: VercelRequest, res: VercelResponse) {
+  res.status(404).end();
 }
