@@ -125,8 +125,8 @@ const RegistrationForm = () => {
       {creneauAttentionMessage && (
         <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200 dark:border-amber-500/30">
           <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Attention</AlertTitle>
-          <AlertDescription>{creneauAttentionMessage}</AlertDescription>
+          <AlertTitle className="text-lg font-bold">Attention</AlertTitle>
+          <AlertDescription className="text-base">{creneauAttentionMessage}</AlertDescription>
         </Alert>
       )}
 

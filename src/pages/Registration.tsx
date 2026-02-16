@@ -43,6 +43,11 @@ const Registration = () => {
   const [clientSecret, setClientSecret] = useState('');
   const { selectedSlot, setSelectedSlot } = useEventSlot();
 
+  // Scroll en haut de la page à l'arrivée sur l'inscription
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Restaurer le créneau depuis l'URL au chargement (ex. retour sur la page, lien enregistré)
   useEffect(() => {
     if (!eventId) return;
