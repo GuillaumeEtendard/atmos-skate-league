@@ -13,6 +13,7 @@ import ReplaySection from '@/components/landing/ReplaySection';
 import LocationSection from '@/components/landing/LocationSection';
 import BackToTop from '@/components/landing/BackToTop';
 import CommunitySection from '@/components/landing/CommunitySection';
+import { Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
 
 const Index = () => {
   // Scroll vers la section planning quand on arrive depuis l'inscription avec #planning
@@ -73,6 +74,44 @@ const Index = () => {
         
         {/* Footer */}
         <footer className="border-t border-border/50 py-8 text-center backdrop-blur-sm">
+          <div className="flex justify-center gap-4 mb-4">
+            <a
+              href="https://www.instagram.com/atmosskateleague"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Instagram Atmos Skate League"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+            <a
+              href="https://www.facebook.com/atmosgear"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Facebook AtmosGear"
+            >
+              <Facebook className="h-5 w-5" />
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UCO72milfHD1PJ8td9p9BHVQ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="YouTube AtmosGear"
+            >
+              <Youtube className="h-5 w-5" />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/atmosgear/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="LinkedIn AtmosGear"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+          </div>
           <p className="text-sm text-muted-foreground">
             © 2026 Atmos Skate League by AtmosGear. Tous droits réservés.
           </p>

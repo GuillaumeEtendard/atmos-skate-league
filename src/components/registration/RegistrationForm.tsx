@@ -15,8 +15,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { useEventSlot } from '@/contexts/EventSlotContext';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { getEventById } from '@/data/events';
 import { cn } from '@/lib/utils';
 
@@ -111,8 +112,24 @@ const RegistrationForm = () => {
     }
   };
 
+  const event = selectedSlot ? getEventById(selectedSlot.id) : null;
+  const creneauAttentionMessage =
+    event?.type === 'king'
+      ? 'Les courses King of the Road sont réservées aux hommes.'
+      : event?.type === 'queen'
+        ? 'Les courses Queen of the Road sont réservées aux femmes.'
+        : null;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {creneauAttentionMessage && (
+        <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200 dark:border-amber-500/30">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Attention</AlertTitle>
+          <AlertDescription>{creneauAttentionMessage}</AlertDescription>
+        </Alert>
+      )}
+
       {/* Informations personnelles */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-foreground">Informations personnelles</h3>
