@@ -5,6 +5,12 @@ import { Lock, LogOut, RefreshCw, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const STORAGE_KEY = 'admin_password';
 
@@ -19,6 +25,13 @@ interface Participant {
   status: string;
   registered_at: string;
   amount: number;
+  currency?: string | null;
+  payment_status?: string | null;
+  payment_intent_id?: string | null;
+  confirmation_email_sent?: boolean;
+  confirmation_email_sent_at?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 interface ByEvent {
@@ -38,6 +51,7 @@ const Admin = () => {
   const [error, setError] = useState<string | null>(null);
   const [byEvent, setByEvent] = useState<ByEvent>({});
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
 
   const fetchParticipants = useCallback(
     async (pwd: string) => {
@@ -198,7 +212,14 @@ const Admin = () => {
                             </thead>
                             <tbody>
                               {list.map((p) => (
-                                <tr key={p.id} className="border-b border-border/50 hover:bg-muted/20">
+                                <tr
+                                  key={p.id}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => setSelectedParticipant(p)}
+                                  onKeyDown={(e) => e.key === 'Enter' && setSelectedParticipant(p)}
+                                  className="border-b border-border/50 hover:bg-muted/30 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset"
+                                >
                                   <td className="p-3 font-medium">{p.name}</td>
                                   <td className="p-3 hidden sm:table-cell">{p.email}</td>
                                   <td className="p-3 hidden md:table-cell">{p.phone}</td>
@@ -230,11 +251,59 @@ const Admin = () => {
                 })}
               </div>
             )}
+
+            <Dialog open={!!selectedParticipant} onOpenChange={(open) => !open && setSelectedParticipant(null)}>
+              <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Détails du participant</DialogTitle>
+                </DialogHeader>
+                {selectedParticipant && (
+                  <div className="grid gap-3 text-sm">
+                    <DetailRow label="Nom" value={selectedParticipant.name} />
+                    <DetailRow label="Email" value={selectedParticipant.email} />
+                    <DetailRow label="Téléphone" value={selectedParticipant.phone} />
+                    <DetailRow label="Créneau" value={eventLabels[selectedParticipant.event_id ?? '__sans_creneau__'] ?? selectedParticipant.event_id ?? 'Non assigné'} />
+                    <DetailRow label="Maillot (modèle)" value={selectedParticipant.jersey ?? '–'} />
+                    <DetailRow label="Taille maillot" value={selectedParticipant.jersey_size ?? '–'} />
+                    <DetailRow label="Statut" value={selectedParticipant.status} />
+                    <DetailRow label="Inscription" value={formatDate(selectedParticipant.registered_at)} />
+                    <DetailRow label="Montant" value={selectedParticipant.amount != null ? `${selectedParticipant.amount} €` : '–'} />
+                    <DetailRow label="Statut paiement" value={selectedParticipant.payment_status ?? '–'} />
+                    <DetailRow label="Payment Intent (Stripe)" value={selectedParticipant.payment_intent_id ?? '–'} />
+                    <DetailRow label="Email de confirmation envoyé" value={selectedParticipant.confirmation_email_sent ? 'Oui' : 'Non'} />
+                    <DetailRow label="Date envoi confirmation" value={formatDate(selectedParticipant.confirmation_email_sent_at)} />
+                    <DetailRow label="Créé le" value={formatDate(selectedParticipant.created_at)} />
+                    <DetailRow label="Modifié le" value={formatDate(selectedParticipant.updated_at)} />
+                    <DetailRow label="ID" value={selectedParticipant.id} className="font-mono text-xs break-all" />
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </>
         )}
       </div>
     </div>
   );
 };
+
+function DetailRow({ label, value, className }: { label: string; value: string | undefined; className?: string }) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-muted-foreground font-medium">{label}</span>
+      <span className={className}>{value ?? '–'}</span>
+    </div>
+  );
+}
+
+function formatDate(iso: string | null | undefined): string {
+  if (!iso) return '–';
+  return new Date(iso).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default Admin;
