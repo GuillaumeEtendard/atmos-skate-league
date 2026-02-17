@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, useCallback, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +13,10 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { EVENTS, getEventById } from '@/data/events';
-import { Loader2, Send } from 'lucide-react';
+import { Lock, Loader2, Send } from 'lucide-react';
+
+const STORAGE_KEY = 'admin_password';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 const JERSEY_OPTIONS = [
   { id: 'black-night', label: 'Black Night' },
@@ -23,7 +27,16 @@ const JERSEY_OPTIONS = [
 const JERSEY_SIZES = ['S', 'M', 'L', 'XL'] as const;
 
 const TestRegistration = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const [password, setPassword] = useState('');
+  const [storedPassword, setStoredPassword] = useState<string | null>(() =>
+    sessionStorage.getItem(STORAGE_KEY)
+  );
+  const [authenticated, setAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ emailSent: boolean; emailNote?: string } | null>(null);
 
@@ -36,6 +49,41 @@ const TestRegistration = () => {
   const [testSecret, setTestSecret] = useState('');
 
   const selectedEvent = eventId ? getEventById(eventId) : null;
+
+  const checkPassword = useCallback(async (pwd: string) => {
+    setAuthLoading(true);
+    setAuthError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/admin-participants`, {
+        headers: { 'Admin-Password': pwd },
+      });
+      if (res.status === 401) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        setStoredPassword(null);
+        setAuthError('Mot de passe incorrect.');
+        return;
+      }
+      setAuthenticated(true);
+      sessionStorage.setItem(STORAGE_KEY, pwd);
+      setStoredPassword(pwd);
+    } catch {
+      setAuthError('Erreur réseau.');
+    } finally {
+      setAuthLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (storedPassword && !authenticated && !authLoading) {
+      checkPassword(storedPassword);
+    }
+  }, [storedPassword, authenticated, authLoading, checkPassword]);
+
+  const handleAuthSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!password.trim()) return;
+    checkPassword(password.trim());
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -105,6 +153,53 @@ const TestRegistration = () => {
       setIsLoading(false);
     }
   };
+
+  const isAutoChecking = storedPassword != null && authLoading && !authenticated && !authError;
+
+  if (!authenticated) {
+    if (isAutoChecking) {
+      return (
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center text-muted-foreground">
+          <Loader2 className="h-8 w-8 animate-spin mb-4" />
+          <p>Connexion…</p>
+        </div>
+      );
+    }
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+          <div className="flex items-center gap-2 text-primary">
+            <Lock className="h-8 w-8" />
+            <h1 className="text-2xl font-bold">Accès test</h1>
+          </div>
+          <form onSubmit={handleAuthSubmit} className="w-full space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="test-password">Mot de passe</Label>
+              <Input
+                id="test-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Mot de passe admin"
+                className="bg-card border-border"
+                autoFocus
+                disabled={authLoading}
+              />
+            </div>
+            {authError && (
+              <p className="text-sm text-destructive">{authError}</p>
+            )}
+            <Button type="submit" className="w-full" disabled={authLoading}>
+              {authLoading ? 'Vérification…' : 'Accéder'}
+            </Button>
+          </form>
+          <Button variant="ghost" onClick={() => navigate('/')}>
+            Retour à l'accueil
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

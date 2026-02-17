@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EVENTS } from '@/data/events';
-import { Lock, LogOut, RefreshCw, Users } from 'lucide-react';
+import { Lock, LogOut, Mail, RefreshCw, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -52,6 +52,8 @@ const Admin = () => {
   const [byEvent, setByEvent] = useState<ByEvent>({});
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
+  const [sendEmailsLoading, setSendEmailsLoading] = useState(false);
+  const [sendEmailsMessage, setSendEmailsMessage] = useState<string | null>(null);
 
   const fetchParticipants = useCallback(
     async (pwd: string) => {
@@ -107,6 +109,39 @@ const Admin = () => {
     setParticipants([]);
     setPassword('');
     setError(null);
+  };
+
+  const handleSendConfirmationEmails = async () => {
+    if (!storedPassword) return;
+    setSendEmailsLoading(true);
+    setSendEmailsMessage(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/send-confirmation-emails`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Admin-Password': storedPassword,
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (res.status === 401) {
+        setSendEmailsMessage('Non autorisé.');
+        return;
+      }
+      if (!res.ok) {
+        setSendEmailsMessage(data.error || 'Erreur lors de l\'envoi.');
+        return;
+      }
+      setSendEmailsMessage(data.message || `Envoyé: ${data.sent}, Échecs: ${data.failed}.`);
+      if (data.sent > 0 && storedPassword) {
+        fetchParticipants(storedPassword);
+      }
+    } catch {
+      setSendEmailsMessage('Erreur réseau.');
+    } finally {
+      setSendEmailsLoading(false);
+    }
   };
 
   const eventOrder = EVENTS.map((e) => e.id);
@@ -165,7 +200,17 @@ const Admin = () => {
                 <Users className="h-7 w-7" />
                 Liste des participants par course
               </h1>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 items-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSendConfirmationEmails}
+                  disabled={sendEmailsLoading || loading}
+                  title="Envoyer l'email de confirmation à tous ceux qui ne l'ont pas reçu"
+                >
+                  <Mail className={sendEmailsLoading ? 'animate-pulse h-4 w-4' : 'h-4 w-4'} />
+                  {sendEmailsLoading ? 'Envoi…' : 'Emails manquants'}
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
@@ -181,6 +226,9 @@ const Admin = () => {
                 </Button>
               </div>
             </div>
+            {sendEmailsMessage && (
+              <p className="text-sm text-muted-foreground mb-4 px-1">{sendEmailsMessage}</p>
+            )}
 
             {loading && participants.length === 0 ? (
               <p className="text-muted-foreground">Chargement…</p>
