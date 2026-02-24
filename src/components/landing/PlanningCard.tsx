@@ -15,6 +15,8 @@ interface PlanningCardProps {
   comingSoon?: boolean;
   /** Mode compact pour la grille mobile (3 cartes par ligne). */
   compact?: boolean;
+  /** Logo partenaire affiché à côté du logo type (ex. deeps). */
+  partnerLogo?: string;
 }
 
 const TYPE_LOGOS: Record<'king' | 'queen' | 'electric' | 'mixte', string> = {
@@ -55,7 +57,7 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, compact = false }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, compact = false, partnerLogo }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -101,14 +103,33 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
       )}
       style={{ perspective: '1000px' }}
     >
-      {/* Logo type en haut à droite, débordant */}
-      <div className={cn('absolute -top-2 -right-2 z-20 pointer-events-none', compact && '-top-1 -right-1')}>
+      {/* Logo type (et logo partenaire si présent) en haut à droite, débordant */}
+      <div
+        className={cn(
+          'absolute -top-2 -right-2 z-20 pointer-events-none flex items-end',
+          partnerLogo ? 'flex-col gap-0.5 md:flex-row md:gap-1' : '',
+          compact && '-top-1 -right-1'
+        )}
+      >
+        {partnerLogo && (
+          <img
+            src={partnerLogo}
+            alt=""
+            className={cn(
+              'w-auto object-contain drop-shadow-lg',
+              type === 'electric' ? 'h-24 md:h-32' : 'h-16 md:h-24',
+              'md:max-w-32'
+            )}
+          />
+        )}
         <img
           src={TYPE_LOGOS[type]}
           alt=""
           className={cn(
             'w-auto object-contain drop-shadow-lg',
-            compact ? (type === 'electric' ? 'h-14' : 'h-12') : type === 'electric' ? 'h-28 md:h-32' : 'h-20 md:h-24'
+            partnerLogo
+              ? type === 'electric' ? 'h-24 md:h-32' : 'h-16 md:h-24'
+              : compact ? (type === 'electric' ? 'h-14' : 'h-12') : type === 'electric' ? 'h-28 md:h-32' : 'h-20 md:h-24'
           )}
         />
       </div>
