@@ -1,8 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { INSTAGRAM_REEL_URLS, getUsernameFromReelUrl } from '@/data/instagramReels';
+import { INSTAGRAM_REEL_URLS, REEL_THUMBNAILS, getUsernameFromReelUrl } from '@/data/instagramReels';
 import SectionTitle from './SectionTitle';
 
 export interface InstagramPost {
@@ -19,9 +19,7 @@ export interface InstagramPost {
 }
 
 const PLACEHOLDER_THUMBNAIL =
-  'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="700" viewBox="0 0 400 700"><rect fill="%231a1a1a" width="400" height="700"/><path fill="%23333" d="M160 280h80v140h-80zM195 315v70l50-35z"/></svg>'
-  );
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=700&fit=crop';
 
 const INSTAGRAM_ICON = (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6">
@@ -36,10 +34,11 @@ const VIDEO_ICON = (
 );
 
 function buildPostsFromReelUrls(thumbnailMap: Record<string, string> = {}): InstagramPost[] {
+  const map = { ...REEL_THUMBNAILS, ...thumbnailMap };
   return INSTAGRAM_REEL_URLS.map((permalink, i) => ({
     id: String(i + 1),
     mediaType: 'VIDEO' as const,
-    thumbnailUrl: thumbnailMap[permalink] ?? PLACEHOLDER_THUMBNAIL,
+    thumbnailUrl: map[permalink] ?? PLACEHOLDER_THUMBNAIL,
     permalink,
     likeCount: 0,
     commentsCount: 0,
@@ -58,9 +57,7 @@ interface InstagramCarouselProps {
 }
 
 const InstagramCarousel = ({
-  title = (
-    <SectionTitle>Hear it from the <span className="text-[rgb(255,176,59)]">#AtmosRiders</span></SectionTitle>
-  ),
+  title = null,
   posts: postsProp,
   profileUrl = 'https://www.instagram.com/atmosskateleague/',
   className = '',
@@ -97,6 +94,42 @@ const InstagramCarousel = ({
     return () => { cancelled = true; };
   }, [postsProp]);
 
+  useEffect(() => {
+    if (posts.length === 0) return;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let rafId: number | null = null;
+    let attempts = 0;
+
+    const tick = () => {
+      const el = trackRef.current;
+      if (!el) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      const next = el.scrollLeft + el.clientWidth * 0.85;
+      el.scrollTo({ left: next >= max ? 0 : next, behavior: 'smooth' });
+    };
+
+    const tryStart = () => {
+      const el = trackRef.current;
+      if (!el) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max > 0) {
+        intervalId = setInterval(tick, 4000);
+        return;
+      }
+      if (++attempts < 120) {
+        rafId = requestAnimationFrame(tryStart);
+      }
+    };
+
+    rafId = requestAnimationFrame(tryStart);
+
+    return () => {
+      if (rafId != null) cancelAnimationFrame(rafId);
+      if (intervalId != null) clearInterval(intervalId);
+    };
+  }, [posts.length]);
+
   const updateScrollState = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
@@ -127,8 +160,6 @@ const InstagramCarousel = ({
     });
   };
 
-  const formatCount = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}K` : String(n));
-
   if (posts.length === 0) return null;
 
   return (
@@ -152,7 +183,7 @@ const InstagramCarousel = ({
         </motion.div>
 
         {/* Carousel */}
-        <div className="relative overflow-x-clip w-full">
+        <div className="relative overflow-hidden w-full">
           <div
             ref={trackRef}
             className="flex gap-3.5 overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide will-change-transform md:ml-[-14px]"
@@ -190,22 +221,8 @@ const InstagramCarousel = ({
 
                   {/* Hover overlay */}
                   <div className="absolute inset-0 z-[1] flex flex-col justify-end p-4 md:p-6 bg-transparent opacity-0 group-hover:opacity-100 group-hover:bg-black/35 transition-all duration-200 text-white">
-                    {/* Center Instagram logo */}
                     <div className="absolute inset-0 flex items-center justify-center z-[2] pointer-events-none">
                       <span className="text-white opacity-90">{INSTAGRAM_ICON}</span>
-                    </div>
-                    {/* Bottom meta */}
-                    <div className="relative z-[2] flex flex-col gap-4 text-sm md:text-sm font-normal leading-5">
-                      <div className="flex flex-row flex-wrap gap-4">
-                        <span className="inline-flex items-center gap-1.5 font-semibold">
-                          <Heart className="w-5 h-5 fill-white" />
-                          {formatCount(post.likeCount)}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 font-semibold">
-                          <MessageCircle className="w-5 h-5" />
-                          {formatCount(post.commentsCount)}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>

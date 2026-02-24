@@ -71,7 +71,7 @@ const Index = () => {
         <SloganCTA />
         <RankingSection />
         <ReplaySection />
-        <InstagramCarousel />
+        {false && <InstagramCarousel />}
         {false && <CommunitySection />}
         
         {/* Footer */}
