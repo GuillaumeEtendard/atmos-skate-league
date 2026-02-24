@@ -13,6 +13,7 @@ import ReplaySection from '@/components/landing/ReplaySection';
 import LocationSection from '@/components/landing/LocationSection';
 import BackToTop from '@/components/landing/BackToTop';
 import CommunitySection from '@/components/landing/CommunitySection';
+import InstagramCarousel from '@/components/landing/InstagramCarousel';
 import { Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
 
 const Index = () => {
@@ -70,6 +71,7 @@ const Index = () => {
         <SloganCTA />
         <RankingSection />
         <ReplaySection />
+        <InstagramCarousel />
         {false && <CommunitySection />}
         
         {/* Footer */}
