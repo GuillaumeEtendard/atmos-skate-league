@@ -2,24 +2,15 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { INSTAGRAM_REEL_URLS, REEL_THUMBNAILS, getUsernameFromReelUrl } from '@/data/instagramReels';
+import { INSTAGRAM_REELS } from '@/data/instagramReels';
 import SectionTitle from './SectionTitle';
 
 export interface InstagramPost {
   id: string;
-  mediaType: 'VIDEO' | 'IMAGE';
-  mediaUrl?: string;
-  thumbnailUrl: string;
+  videoUrl: string;
   permalink: string;
-  caption?: string;
-  likeCount: number;
-  commentsCount: number;
   username: string;
-  avatarUrl?: string;
 }
-
-const PLACEHOLDER_THUMBNAIL =
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=700&fit=crop';
 
 const INSTAGRAM_ICON = (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6">
@@ -27,38 +18,21 @@ const INSTAGRAM_ICON = (
   </svg>
 );
 
-const VIDEO_ICON = (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-5 h-5">
-    <path fill="currentColor" fillRule="evenodd" d="M2 7.25h3.614L9.364 2H6a4 4 0 0 0-4 4v1.25Zm20 0h-6.543l3.641-5.097A4.002 4.002 0 0 1 22 6v1.25ZM2 8.75h20V18a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8.75Zm5.457-1.5L11.207 2h6.157l-3.75 5.25H7.457Zm7.404 7.953a.483.483 0 0 0 0-.837l-3.985-2.3a.483.483 0 0 0-.725.418v4.601c0 .372.403.605.725.419l3.985-2.301Z" clipRule="evenodd" />
-  </svg>
-);
-
-function buildPostsFromReelUrls(thumbnailMap: Record<string, string> = {}): InstagramPost[] {
-  const map = { ...REEL_THUMBNAILS, ...thumbnailMap };
-  return INSTAGRAM_REEL_URLS.map((permalink, i) => ({
-    id: String(i + 1),
-    mediaType: 'VIDEO' as const,
-    thumbnailUrl: map[permalink] ?? PLACEHOLDER_THUMBNAIL,
-    permalink,
-    likeCount: 0,
-    commentsCount: 0,
-    username: getUsernameFromReelUrl(permalink),
-  }));
-}
-
-const defaultPosts = buildPostsFromReelUrls();
+const defaultPosts: InstagramPost[] = INSTAGRAM_REELS.map((r, i) => ({
+  id: String(i + 1),
+  videoUrl: r.videoUrl,
+  permalink: r.permalink,
+  username: r.username,
+}));
 
 interface InstagramCarouselProps {
   title?: React.ReactNode;
-  posts?: InstagramPost[];
-  /** Instagram profile URL for "Follow" link */
   profileUrl?: string;
   className?: string;
 }
 
 const InstagramCarousel = ({
   title = null,
-  posts: postsProp,
   profileUrl = 'https://www.instagram.com/atmosskateleague/',
   className = '',
 }: InstagramCarouselProps) => {
@@ -68,31 +42,7 @@ const InstagramCarousel = ({
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [showArrows, setShowArrows] = useState(false);
 
-  const [postsWithThumbnails, setPostsWithThumbnails] = useState<InstagramPost[]>(
-    () => postsProp ?? defaultPosts
-  );
-  const posts = postsProp ?? postsWithThumbnails;
-
-  useEffect(() => {
-    if (postsProp != null) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const base = typeof window !== 'undefined' ? window.location.origin : '';
-        const res = await fetch(`${base}/api/instagram-reel-thumbnails`);
-        if (!res.ok || cancelled) return;
-        const data: { permalink: string; thumbnailUrl: string | null }[] = await res.json();
-        const map: Record<string, string> = {};
-        for (const item of data) {
-          if (item.thumbnailUrl) map[item.permalink] = item.thumbnailUrl;
-        }
-        if (!cancelled) setPostsWithThumbnails(buildPostsFromReelUrls(map));
-      } catch {
-        // keep placeholder thumbnails
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [postsProp]);
+  const posts = defaultPosts;
 
   useEffect(() => {
     if (posts.length === 0) return;
@@ -200,30 +150,20 @@ const InstagramCarousel = ({
                 rel="noopener noreferrer"
                 className="flex-shrink-0 w-[calc(50%-6px)] sm:w-[calc(33.333%-10px)] md:min-w-[calc(25%+3.5px)] md:w-[calc(25%+3.5px)] md:pl-3.5 box-border select-none snap-center"
               >
-                <div className="group relative w-full overflow-hidden rounded-xl md:rounded-[12px] bg-black/20 aspect-[9/16]">
-                  {/* Media */}
-                  <img
-                    src={post.thumbnailUrl}
-                    alt={post.caption ?? 'Instagram reel'}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110 select-none"
-                    onError={(e) => {
-                      const el = e.currentTarget;
-                      if (el.src !== PLACEHOLDER_THUMBNAIL) el.src = PLACEHOLDER_THUMBNAIL;
-                    }}
+                <div className="group relative w-full overflow-hidden rounded-xl md:rounded-[12px] bg-black aspect-[9/16]">
+                  <video
+                    src={post.videoUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
 
-                  {/* Video badge */}
-                  {post.mediaType === 'VIDEO' && (
-                    <div className="absolute top-3 right-3 z-[2] p-2 text-white drop-shadow-[0_0_8px_rgba(0,0,0,0.2)]">
-                      {VIDEO_ICON}
-                    </div>
-                  )}
-
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 z-[1] flex flex-col justify-end p-4 md:p-6 bg-transparent opacity-0 group-hover:opacity-100 group-hover:bg-black/35 transition-all duration-200 text-white">
-                    <div className="absolute inset-0 flex items-center justify-center z-[2] pointer-events-none">
-                      <span className="text-white opacity-90">{INSTAGRAM_ICON}</span>
-                    </div>
+                  <div className="absolute inset-0 z-[1] flex items-center justify-center bg-transparent opacity-0 group-hover:opacity-100 group-hover:bg-black/35 transition-all duration-200 text-white pointer-events-none">
+                    <span className="text-white opacity-90">{INSTAGRAM_ICON}</span>
                   </div>
                 </div>
               </a>

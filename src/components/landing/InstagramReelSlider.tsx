@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import type { Settings } from 'react-slick';
 import { motion } from 'framer-motion';
@@ -32,16 +32,30 @@ function NextArrow({ onClick }: { onClick?: React.MouseEventHandler }) {
   );
 }
 
+function getSlidesToShow() {
+  if (typeof window === 'undefined') return 4;
+  if (window.innerWidth < 600) return 2;
+  if (window.innerWidth < 1024) return 3;
+  return 4;
+}
+
 export default function InstagramReelSlider() {
   const [muted, setMuted] = useState(true);
+  const [slidesToShow, setSlidesToShow] = useState(getSlidesToShow);
   const sliderRef = useRef<Slider>(null);
+
+  useEffect(() => {
+    const onResize = () => setSlidesToShow(getSlidesToShow());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const settings: Settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
+    slidesToShow,
+    slidesToScroll: slidesToShow,
     autoplay: true,
     autoplaySpeed: 4000,
     cssEase: 'linear',
@@ -62,16 +76,6 @@ export default function InstagramReelSlider() {
         style={{ padding: 0, border: 'none', background: 'transparent' }}
       />
     ),
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2, slidesToScroll: 1 },
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 2, slidesToScroll: 1 },
-      },
-    ],
   };
 
   return (
