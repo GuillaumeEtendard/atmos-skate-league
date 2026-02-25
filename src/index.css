@@ -378,4 +378,19 @@
   .animate-glow-pulse {
     animation: glow-pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
+
+  /* react-slick: hide default dot buttons so custom paging renders cleanly */
+  .slick-dots li button {
+    padding: 0;
+    width: auto;
+    height: auto;
+  }
+  .slick-dots li button::before {
+    display: none;
+  }
+  .slick-dots li {
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
 }

@@ -14,6 +14,7 @@ import LocationSection from '@/components/landing/LocationSection';
 import BackToTop from '@/components/landing/BackToTop';
 import CommunitySection from '@/components/landing/CommunitySection';
 import InstagramCarousel from '@/components/landing/InstagramCarousel';
+import InstagramReelSlider from '@/components/landing/InstagramReelSlider';
 import { Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
 
 const Index = () => {
@@ -62,6 +63,7 @@ const Index = () => {
         {false && <LeagueFormatSection />}
         
         <EventExplanation />
+        <InstagramReelSlider />
         <LocationSection />
         <PlanningSection />
         <EntryFeesSection />

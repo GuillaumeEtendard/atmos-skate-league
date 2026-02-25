@@ -15,3 +15,4 @@ export { default as ReplaySection } from './ReplaySection';
 export { default as LocationSection } from './LocationSection';
 export { default as CommunitySection } from './CommunitySection';
 export { default as SectionTitle } from './SectionTitle';
+export { default as InstagramReelSlider } from './InstagramReelSlider';
