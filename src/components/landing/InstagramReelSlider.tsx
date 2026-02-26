@@ -1,8 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import Slider from 'react-slick';
 import type { Settings } from 'react-slick';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Instagram, Volume2, VolumeX } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Instagram, X } from 'lucide-react';
 import { INSTAGRAM_REELS } from '@/data/instagramReels';
 import SectionTitle from './SectionTitle';
 
@@ -39,10 +39,73 @@ function getSlidesToShow() {
   return 4;
 }
 
+type Reel = (typeof INSTAGRAM_REELS)[number];
+
+function VideoModal({ reel, onClose }: { reel: Reel; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="modal-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          key="modal-content"
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.85, opacity: 0 }}
+          transition={{ type: 'spring', damping: 22, stiffness: 260 }}
+          className="relative w-full max-w-[min(90vw,420px)] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <video
+            ref={videoRef}
+            src={reel.videoUrl}
+            autoPlay
+            loop
+            playsInline
+            controls
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute bottom-3 left-3 z-[4] flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1 pointer-events-none">
+            <Instagram className="w-3 h-3 text-white/80" />
+            <span className="text-[11px] font-medium text-white/90">@{reel.username}</span>
+          </div>
+          <button
+            type="button"
+            aria-label="Fermer"
+            onClick={onClose}
+            className="absolute top-3 right-3 z-[5] w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center hover:bg-[#ffd600]/80 hover:text-black transition-all duration-200"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export default function InstagramReelSlider() {
-  const [muted, setMuted] = useState(true);
   const [slidesToShow, setSlidesToShow] = useState(getSlidesToShow);
+  const [activeReel, setActiveReel] = useState<Reel | null>(null);
   const sliderRef = useRef<Slider>(null);
+  const closeModal = useCallback(() => setActiveReel(null), []);
 
   useEffect(() => {
     const onResize = () => setSlidesToShow(getSlidesToShow());
@@ -106,26 +169,37 @@ export default function InstagramReelSlider() {
           <Slider ref={sliderRef} {...settings}>
             {INSTAGRAM_REELS.map((reel) => (
               <div key={reel.permalink} className="px-2 md:px-3 outline-none">
-                <div className="block relative w-full overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_32px_rgba(255,214,0,0.15)] transition-shadow duration-300 group">
+                <button
+                  type="button"
+                  aria-label={`Voir la vidéo de @${reel.username}`}
+                  onClick={() => setActiveReel(reel)}
+                  className="block relative w-full overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_32px_rgba(255,214,0,0.25)] transition-shadow duration-300 group cursor-pointer"
+                >
                   <video
                     src={reel.videoUrl}
                     autoPlay
                     loop
-                    muted={muted}
+                    muted
                     playsInline
                     preload="metadata"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
 
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 z-[2] bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-2xl" />
+                  {/* Hover overlay with play hint */}
+                  <div className="absolute inset-0 z-[2] bg-black/0 group-hover:bg-black/30 transition-colors duration-300 rounded-2xl flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
 
                   {/* Username badge */}
                   <div className="absolute bottom-3 left-3 z-[4] flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1">
                     <Instagram className="w-3 h-3 text-white/80" />
                     <span className="text-[11px] font-medium text-white/90">@{reel.username}</span>
                   </div>
-                </div>
+                </button>
               </div>
             ))}
           </Slider>
@@ -133,7 +207,7 @@ export default function InstagramReelSlider() {
 
         {/* Controls */}
         <div className="mt-8 flex flex-col items-center gap-4">
-          
+          <a
             href="https://www.instagram.com/atmosskateleague/"
             target="_blank"
             rel="noopener noreferrer"
@@ -147,6 +221,10 @@ export default function InstagramReelSlider() {
         </div>
 
       </div>
+
+      {/* Video popup modal */}
+      {activeReel && <VideoModal reel={activeReel} onClose={closeModal} />}
+
     </section>
   );
 }
