@@ -106,12 +106,7 @@ export default function InstagramReelSlider() {
           <Slider ref={sliderRef} {...settings}>
             {INSTAGRAM_REELS.map((reel) => (
               <div key={reel.permalink} className="px-2 md:px-3 outline-none">
-                <a
-                  href={reel.permalink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block relative w-full overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_32px_rgba(255,214,0,0.15)] transition-shadow duration-300 group"
-                >
+                <div className="block relative w-full overflow-hidden rounded-2xl bg-black aspect-[9/16] shadow-[0_4px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_32px_rgba(255,214,0,0.15)] transition-shadow duration-300 group">
                   <video
                     src={reel.videoUrl}
                     autoPlay
@@ -130,7 +125,7 @@ export default function InstagramReelSlider() {
                     <Instagram className="w-3 h-3 text-white/80" />
                     <span className="text-[11px] font-medium text-white/90">@{reel.username}</span>
                   </div>
-                </a>
+                </div>
               </div>
             ))}
           </Slider>
@@ -138,7 +133,7 @@ export default function InstagramReelSlider() {
 
         {/* Controls */}
         <div className="mt-8 flex flex-col items-center gap-4">
-          <a
+          
             href="https://www.instagram.com/atmosskateleague/"
             target="_blank"
             rel="noopener noreferrer"
