@@ -45,14 +45,41 @@ function VideoModal({ reel, onClose }: { reel: Reel; onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
+
+    // Try to start playback with sound as soon as the modal opens.
+    // On mobile, this is tied to the tap that opened the modal,
+    // which increases the chances that autoplay with sound is allowed.
+    const el = videoRef.current;
+    if (el) {
+      el.muted = false;
+      el
+        .play()
+        .catch(() => {
+          // If the browser still blocks autoplay, the user can hit play manually.
+        });
+    }
+
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
   }, [onClose]);
+
+  const handleCanPlay = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = false;
+    el
+      .play()
+      .catch(() => {
+        // ignore – user interaction may still be required on some browsers
+      });
+  };
 
   return (
     <AnimatePresence>
@@ -81,6 +108,8 @@ function VideoModal({ reel, onClose }: { reel: Reel; onClose: () => void }) {
             loop
             playsInline
             controls
+            preload="auto"
+            onCanPlay={handleCanPlay}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute bottom-3 left-3 z-[4] flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1 pointer-events-none">
