@@ -99,7 +99,8 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
       ref={cardRef}
       className={cn(
         'card-3d group relative overflow-visible',
-        compact ? 'min-w-0 w-full' : 'min-w-[260px] md:min-w-0'
+        compact ? 'min-w-0 w-full' : 'min-w-[260px] md:min-w-0',
+        spotsRemaining === 0 && 'opacity-60'
       )}
       style={{ perspective: '1000px' }}
     >
@@ -139,8 +140,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           'relative overflow-hidden rounded-xl border bg-card transition-all duration-300',
           compact ? 'p-3' : 'p-6',
           styles.border,
-          !comingSoon && 'group-hover:' + styles.glow,
-          spotsRemaining === 0 && 'opacity-60'
+          !comingSoon && 'group-hover:' + styles.glow
         )}
         style={{
           transform: compact ? undefined : `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`,
