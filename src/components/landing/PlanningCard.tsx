@@ -139,7 +139,8 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           'relative overflow-hidden rounded-xl border bg-card transition-all duration-300',
           compact ? 'p-3' : 'p-6',
           styles.border,
-          !comingSoon && 'group-hover:' + styles.glow
+          !comingSoon && 'group-hover:' + styles.glow,
+          spotsRemaining === 0 && 'opacity-60'
         )}
         style={{
           transform: compact ? undefined : `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`,
@@ -215,7 +216,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             onClick={handleRegistration}
             onMouseEnter={handleMouseLeave}
           >
-            {comingSoon ? 'COMING SOON' : spotsRemaining === 0 ? 'COMPLET' : 'INSCRIPTION'}
+            {comingSoon ? 'COMING SOON' : spotsRemaining === 0 ? <span className="text-red-500">SOLD OUT</span> : 'INSCRIPTION'}
           </Button>
         </div>
       </div>
