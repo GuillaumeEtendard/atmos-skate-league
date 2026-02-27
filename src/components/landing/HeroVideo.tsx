@@ -21,7 +21,7 @@ const HeroVideo = () => {
       {/* Video Background */}
       <div className="absolute inset-0">
         <video ref={videoRef} autoPlay loop muted playsInline className="h-full w-full object-cover">
-          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          <source src="/videos/compressed/hero-background.mp4" type="video/mp4" />
         </video>
       </div>
 
