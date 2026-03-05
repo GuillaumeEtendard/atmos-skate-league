@@ -19,7 +19,7 @@ const rewards = [{
   image: cinnarollPrize
 }, {
   title: '2 sessions Karting offertes',
-  value: '40€',
+  value: '50€',
   image: smileWorldPrize
 }];
 const RewardsSection = () => {
