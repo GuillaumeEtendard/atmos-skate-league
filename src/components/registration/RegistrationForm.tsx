@@ -41,6 +41,7 @@ const RegistrationForm = () => {
   const [phone, setPhone] = useState('');
   const [jersey, setJersey] = useState<string>('');
   const [jerseySize, setJerseySize] = useState<string>('');
+  const [ageCategory, setAgeCategory] = useState<'18+' | '18-' | ''>('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,10 +51,10 @@ const RegistrationForm = () => {
     }
 
     // Validation basique
-    if (!email || !name || !phone || !jersey || !jerseySize) {
+    if (!email || !name || !phone || !jersey || !jerseySize || !ageCategory) {
       toast({
         title: 'Erreur',
-        description: 'Veuillez remplir tous les champs obligatoires, choisir un maillot et une taille',
+        description: 'Veuillez remplir tous les champs obligatoires, choisir un maillot, une taille et votre tranche d\'âge',
         variant: 'destructive',
       });
       return;
@@ -78,6 +79,7 @@ const RegistrationForm = () => {
       returnUrl.searchParams.set('phone', phone);
       returnUrl.searchParams.set('jersey', jersey);
       returnUrl.searchParams.set('jersey_size', jerseySize);
+      returnUrl.searchParams.set('age_category', ageCategory);
 
       const { error } = await stripe.confirmPayment({
         elements,
@@ -214,6 +216,28 @@ const RegistrationForm = () => {
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-3">
+          <Label>Tranche d'âge *</Label>
+          <div className="grid grid-cols-2 gap-3">
+            {(['18+', '18-'] as const).map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setAgeCategory(cat)}
+                className={cn(
+                  'flex items-center justify-center rounded-lg border-2 p-3 text-sm font-medium transition-all',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd600] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                  ageCategory === cat
+                    ? 'border-[#ffd600] bg-[#ffd600]/10 ring-2 ring-[#ffd600]/30 text-foreground'
+                    : 'border-border bg-background/50 hover:border-[#ffd600]/50 hover:bg-background/80 text-foreground'
+                )}
+              >
+                {cat === '18+' ? "J'ai plus de 18 ans" : "J'ai moins de 18 ans"}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

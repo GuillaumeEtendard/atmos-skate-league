@@ -17,6 +17,7 @@ const Confirmation = () => {
     const phone = searchParams.get('phone');
     const jersey = searchParams.get('jersey');
     const jerseySize = searchParams.get('jersey_size');
+    const ageCategory = searchParams.get('age_category');
     const eventId = searchParams.get('event_id');
     const eventLabel = searchParams.get('event_label');
     const creneau = searchParams.get('creneau');
@@ -54,6 +55,7 @@ const Confirmation = () => {
           phone,
           jersey: jersey || undefined,
           jersey_size: jerseySize || undefined,
+          age_category: ageCategory || undefined,
           eventId,
           eventLabel: eventLabel || undefined,
           creneau: creneau || undefined,

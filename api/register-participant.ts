@@ -34,7 +34,7 @@ export default async function handler(
   }
 
   try {
-    const { paymentIntent, name, email, phone, jersey, jersey_size: jerseySize, eventId, eventLabel, creneau, date } = req.body;
+    const { paymentIntent, name, email, phone, jersey, jersey_size: jerseySize, age_category: ageCategory, eventId, eventLabel, creneau, date } = req.body;
 
     // Vérifier que tous les champs requis sont présents
     if (!paymentIntent || !name || !email || !phone) {
@@ -71,6 +71,9 @@ export default async function handler(
     }
     if (jerseySize) {
       insertData.jersey_size = jerseySize;
+    }
+    if (ageCategory) {
+      insertData.age_category = ageCategory;
     }
 
     const { data: participant, error: dbError } = await supabase
