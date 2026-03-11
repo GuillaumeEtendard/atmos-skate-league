@@ -125,7 +125,7 @@ const RegistrationForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {creneauAttentionMessage && (
-        <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200 dark:border-amber-500/30">
+        <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200 dark:border-amber-500/30 [&>svg]:top-[18px]">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle className="text-lg font-bold">Attention</AlertTitle>
           <AlertDescription className="text-base">{creneauAttentionMessage}</AlertDescription>
