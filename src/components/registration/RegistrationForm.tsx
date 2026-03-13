@@ -260,6 +260,11 @@ const RegistrationForm = () => {
         </p>
       </div>
 
+      {/* Conditions de non-remboursement */}
+      <p className="text-sm text-muted-foreground">
+        * Les frais d'inscription ne sont pas remboursables en cas d'annulation ou d'absence le jour de l'événement.
+      </p>
+
       {/* Bouton de soumission */}
       <Button
         type="submit"
