@@ -37,6 +37,12 @@ const Confirmation = () => {
 
     // Vérifier le statut du paiement
     if (redirectStatus === 'succeeded') {
+      // En dev, on bypass l'appel API
+      if (import.meta.env.DEV) {
+        setStatus('success');
+        return;
+      }
+
       // Vérifier si déjà traité (éviter les doubles soumissions)
       const registrationKey = `registration_${paymentIntent}`;
       if (sessionStorage.getItem(registrationKey)) {

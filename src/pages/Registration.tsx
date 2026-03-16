@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import RegistrationForm from '@/components/registration/RegistrationForm';
+import DevRegistrationForm from '@/components/registration/DevRegistrationForm';
+
+const isDev = import.meta.env.DEV;
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Trophy } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -71,6 +74,7 @@ const Registration = () => {
   }, [selectedSlot, eventId, navigate]);
 
   useEffect(() => {
+    if (isDev) return;
     // Créer un PaymentIntent dès que la page se charge
     fetch('/api/create-payment-intent', {
       method: 'POST',
@@ -221,7 +225,9 @@ const Registration = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">
-          {clientSecret ? (
+          {isDev ? (
+              <DevRegistrationForm />
+            ) : clientSecret ? (
               <Elements options={options} stripe={stripePromise}>
                 <RegistrationForm />
               </Elements>

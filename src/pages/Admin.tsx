@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EVENTS } from '@/data/events';
-import { Lock, LogOut, Mail, RefreshCw, Users } from 'lucide-react';
+import { Lock, LogOut, Mail, Package, RefreshCw, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -201,6 +201,14 @@ const Admin = () => {
                 Liste des participants par course
               </h1>
               <div className="flex flex-wrap gap-2 items-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/admin-stock')}
+                >
+                  <Package className="h-4 w-4" />
+                  Stock maillots
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"

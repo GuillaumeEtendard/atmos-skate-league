@@ -1,14 +1,10 @@
 import { useState, useEffect, FormEvent } from 'react';
-import {
-  useStripe,
-  useElements,
-  PaymentElement,
-} from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { getEventById } from '@/data/events';
@@ -24,13 +20,11 @@ const JERSEY_SIZES = ['S', 'M', 'L', 'XL'] as const;
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
-const RegistrationForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
+const DevRegistrationForm = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { selectedSlot } = useEventSlot();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -48,18 +42,13 @@ const RegistrationForm = () => {
 
   const handleJerseyChange = (jerseyId: string) => {
     setJersey(jerseyId);
-    // Reset size if it becomes sold out with new jersey
     if (jerseySize && stockData[jerseyId]?.[jerseySize] === 0) {
       setJerseySize('');
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
 
     if (!email || !name || !phone || !jersey || !jerseySize || !ageCategory) {
       toast({
@@ -70,57 +59,28 @@ const RegistrationForm = () => {
       return;
     }
 
-    setIsLoading(true);
+    const params = new URLSearchParams({
+      payment_intent: 'pi_dev_test_' + Date.now(),
+      redirect_status: 'succeeded',
+      name,
+      email,
+      phone,
+      jersey,
+      jersey_size: jerseySize,
+      age_category: ageCategory,
+    });
 
-    try {
-      const returnUrl = new URL(`${window.location.origin}/confirmation`);
-      if (selectedSlot) {
-        returnUrl.searchParams.set('event_id', selectedSlot.id);
-        const event = getEventById(selectedSlot.id);
-        if (event) {
-          returnUrl.searchParams.set('event_label', `${event.title} – ${event.date}`);
-          returnUrl.searchParams.set('creneau', event.title);
-          returnUrl.searchParams.set('date', event.date);
-        }
+    if (selectedSlot) {
+      params.set('event_id', selectedSlot.id);
+      const event = getEventById(selectedSlot.id);
+      if (event) {
+        params.set('event_label', `${event.title} – ${event.date}`);
+        params.set('creneau', event.title);
+        params.set('date', event.date);
       }
-      returnUrl.searchParams.set('name', name);
-      returnUrl.searchParams.set('email', email);
-      returnUrl.searchParams.set('phone', phone);
-      returnUrl.searchParams.set('jersey', jersey);
-      returnUrl.searchParams.set('jersey_size', jerseySize);
-      returnUrl.searchParams.set('age_category', ageCategory);
-
-      const { error } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: returnUrl.toString(),
-          receipt_email: email,
-          payment_method_data: {
-            billing_details: {
-              name: name,
-              email: email,
-              phone: phone,
-            },
-          },
-        },
-      });
-
-      if (error) {
-        toast({
-          title: 'Erreur de paiement',
-          description: error.message,
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Une erreur est survenue lors du paiement',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
     }
+
+    navigate(`/confirmation?${params.toString()}`);
   };
 
   const event = selectedSlot ? getEventById(selectedSlot.id) : null;
@@ -133,6 +93,10 @@ const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-xs text-yellow-400 font-mono">
+        ⚙️ Mode développement — paiement Stripe désactivé
+      </div>
+
       {creneauAttentionMessage && (
         <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200 dark:border-amber-500/30 [&>svg]:top-[18px]">
           <AlertTriangle className="h-4 w-4" />
@@ -275,22 +239,6 @@ const RegistrationForm = () => {
         </div>
       </div>
 
-      {/* Informations de paiement */}
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-foreground">Informations de paiement</h3>
-        <div className="border border-border rounded-lg p-4 bg-background/50">
-          <PaymentElement />
-        </div>
-      </div>
-
-      {/* Récapitulatif */}
-      <div className="border-t border-border pt-4">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-lg font-semibold">Total à payer</span>
-          <span className="text-2xl font-bold text-[#ffd600]">35,00 €</span>
-        </div>
-      </div>
-
       {/* Conditions de non-remboursement */}
       <p className="text-sm text-muted-foreground">
         * Les frais d'inscription ne sont pas remboursables en cas d'annulation ou d'absence le jour de l'événement.
@@ -299,17 +247,9 @@ const RegistrationForm = () => {
       {/* Bouton de soumission */}
       <Button
         type="submit"
-        disabled={!stripe || isLoading}
         className="w-full bg-[#ffd600] hover:bg-[#ffd600]/90 text-black font-semibold py-6 text-lg"
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Traitement en cours...
-          </>
-        ) : (
-          'Valider et payer'
-        )}
+        Valider et Payer
       </Button>
 
       <p className="text-xs text-center text-muted-foreground">
@@ -319,4 +259,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default DevRegistrationForm;
