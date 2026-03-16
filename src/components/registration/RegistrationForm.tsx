@@ -255,9 +255,6 @@ const RegistrationForm = () => {
           <span className="text-lg font-semibold">Total à payer</span>
           <span className="text-2xl font-bold text-[#ffd600]">35,00 €</span>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Frais d'inscription à la ligue Atmos Skate League (inclut le maillot de 35€)
-        </p>
       </div>
 
       {/* Conditions de non-remboursement */}
