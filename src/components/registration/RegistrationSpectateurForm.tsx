@@ -38,7 +38,14 @@ const RegistrationSpectateurForm = () => {
         throw new Error(data.error || 'Erreur lors de l\'inscription');
       }
 
-      navigate('/confirmation-spectateur');
+      navigate('/confirmation-spectateur', {
+        state: {
+          first_name: form.first_name,
+          last_name: form.last_name,
+          email: form.email,
+          phone: form.phone,
+        },
+      });
     } catch (error: any) {
       toast({
         title: 'Erreur',
@@ -120,7 +127,7 @@ const RegistrationSpectateurForm = () => {
       <Button
         type="submit"
         disabled={loading}
-        className="w-full bg-racing-yellow text-primary font-bold uppercase tracking-wider hover:bg-racing-yellow/90 disabled:opacity-50"
+        className="w-full bg-racing-yellow text-black font-bold uppercase tracking-wider hover:bg-racing-yellow/90 disabled:opacity-50"
       >
         {loading ? 'Inscription en cours...' : 'Confirmer mon inscription'}
       </Button>

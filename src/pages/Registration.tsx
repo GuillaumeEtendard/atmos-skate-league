@@ -225,7 +225,7 @@ const Registration = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">
-          {isDev ? (
+            {isDev ? (
               <DevRegistrationForm />
             ) : clientSecret ? (
               <Elements options={options} stripe={stripePromise}>
@@ -236,14 +236,6 @@ const Registration = () => {
                 <div className="text-center py-12">
                   <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ffd600] mb-4"></div>
                   <p className="text-muted-foreground">Chargement du formulaire de paiement...</p>
-                  <div className="mt-8 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                    <p className="text-sm text-orange-300">
-                      ⚠️ <strong>Configuration requise:</strong> Pour activer le paiement, vous devez configurer votre backend Stripe.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Consultez le fichier README pour les instructions de configuration.
-                    </p>
-                  </div>
                 </div>
               </div>
             )}

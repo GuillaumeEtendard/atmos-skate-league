@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, Calendar, Clock, MapPin } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { CheckCircle2, Calendar, Clock, MapPin, User, Mail, Phone } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,7 @@ const typeStyles = {
 
 const ConfirmationSpectateur = () => {
   const navigate = useNavigate();
+  const { state } = useLocation() as { state: { first_name: string; last_name: string; email: string; phone: string } | null };
   const { selectedSlot } = useEventSlot();
 
   const slotStyles = selectedSlot ? typeStyles[selectedSlot.type] : null;
@@ -72,6 +73,29 @@ const ConfirmationSpectateur = () => {
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                   <span className="text-foreground font-medium">Atmos Skate League</span>
+                </div>
+              </motion.div>
+            )}
+
+            {state && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45 }}
+                className="rounded-lg border border-border bg-card/50 p-5 text-left space-y-3"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Tes informations</p>
+                <div className="flex items-center gap-3">
+                  <User className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-foreground font-medium">{state.first_name} {state.last_name}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-foreground font-medium">{state.email}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-foreground font-medium">{state.phone}</span>
                 </div>
               </motion.div>
             )}
