@@ -2,7 +2,9 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useEventSlot } from '@/contexts/EventSlotContext';
+import { Trophy, Users } from 'lucide-react';
 
 interface PlanningCardProps {
   id: string;
@@ -61,6 +63,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
   const { setSelectedSlot } = useEventSlot();
 
@@ -69,7 +72,17 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   const handleRegistration = () => {
     if (comingSoon) return;
     setSelectedSlot({ id, date, time, title, type });
+    setShowPopup(true);
+  };
+
+  const handleChallenger = () => {
+    setShowPopup(false);
     navigate(`/inscription/${id}`);
+  };
+
+  const handleSpectateur = () => {
+    setShowPopup(false);
+    navigate(`/inscription-spectateur/${id}`);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -218,6 +231,45 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           >
             {comingSoon ? 'COMING SOON' : spotsRemaining === 0 ? <span className="text-red-500">SOLD OUT</span> : 'INSCRIPTION'}
           </Button>
+
+          <Dialog open={showPopup} onOpenChange={setShowPopup}>
+            <DialogContent className="max-w-sm border-racing-yellow/30 bg-background">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl font-bold uppercase tracking-wider text-racing-yellow">
+                  Mode d'inscription
+                </DialogTitle>
+              </DialogHeader>
+              <p className="text-center text-sm text-muted-foreground mb-2">
+                {date} · {time}
+              </p>
+              <div className="flex flex-col gap-3 mt-2">
+                <button
+                  onClick={handleChallenger}
+                  className="group flex items-center gap-4 rounded-lg border border-racing-yellow/30 bg-racing-yellow/5 p-4 text-left transition-all hover:border-racing-yellow hover:bg-racing-yellow/10"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-racing-yellow/20 text-racing-yellow group-hover:bg-racing-yellow/30">
+                    <Trophy className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">S'inscrire en challenger</p>
+                    <p className="text-xs text-muted-foreground">Participe à la compétition (35€)</p>
+                  </div>
+                </button>
+                <button
+                  onClick={handleSpectateur}
+                  className="group flex items-center gap-4 rounded-lg border border-border bg-card/50 p-4 text-left transition-all hover:border-foreground/30 hover:bg-card"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground group-hover:bg-muted/80">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">S'inscrire en spectateur</p>
+                    <p className="text-xs text-muted-foreground">Viens supporter et profiter de l'événement</p>
+                  </div>
+                </button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>

@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { EventSlotProvider } from "./contexts/EventSlotContext";
 import Index from "./pages/Index";
 import Registration from "./pages/Registration";
+import RegistrationSpectateur from "./pages/RegistrationSpectateur";
 import Confirmation from "./pages/Confirmation";
+import ConfirmationSpectateur from "./pages/ConfirmationSpectateur";
 import Admin from "./pages/Admin";
 import AdminStock from "./pages/AdminStock";
 import TestRegistration from "./pages/TestRegistration";
@@ -25,7 +27,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/inscription" element={<Registration />} />
             <Route path="/inscription/:eventId" element={<Registration />} />
+            <Route path="/inscription-spectateur/:eventId" element={<RegistrationSpectateur />} />
             <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="/confirmation-spectateur" element={<ConfirmationSpectateur />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin-stock" element={<AdminStock />} />
             <Route path="/test" element={<TestRegistration />} />

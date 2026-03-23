@@ -1,0 +1,130 @@
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Calendar, Clock, Users } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { useEventSlot } from '@/contexts/EventSlotContext';
+import { cn } from '@/lib/utils';
+import { getEventById } from '@/data/events';
+import RegistrationSpectateurForm from '@/components/registration/RegistrationSpectateurForm';
+
+const typeStyles = {
+  king: { bg: 'bg-racing-yellow/10', border: 'border-racing-yellow/30', text: 'text-racing-yellow' },
+  queen: { bg: 'bg-racing-purple/10', border: 'border-racing-purple/30', text: 'text-racing-purple' },
+  electric: { bg: 'bg-racing-blue/10', border: 'border-racing-blue/30', text: 'text-racing-blue' },
+  mixte: { bg: 'bg-racing-red/10', border: 'border-racing-red/30', text: 'text-racing-red' },
+};
+
+const RegistrationSpectateur = () => {
+  const navigate = useNavigate();
+  const { eventId } = useParams<{ eventId?: string }>();
+  const { selectedSlot, setSelectedSlot } = useEventSlot();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    if (!eventId) return;
+    const event = getEventById(eventId);
+    if (event) {
+      setSelectedSlot({ id: event.id, date: event.date, time: event.time, title: event.title, type: event.type });
+    }
+  }, [eventId, setSelectedSlot]);
+
+  return (
+    <div className="min-h-screen bg-background relative">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(#ffd600 1px, transparent 1px), linear-gradient(90deg, #ffd600 1px, transparent 1px)',
+          backgroundSize: '60px 60px'
+        }} />
+        <div className="absolute top-[10%] -left-40 w-[600px] h-[600px] bg-[#ffd600]/6 rounded-full blur-[150px]" style={{ animation: 'glow-pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite' }} />
+        <div className="absolute top-[40%] -right-40 w-[500px] h-[500px] bg-[#ffd600]/5 rounded-full blur-[130px]" style={{ animation: 'glow-pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '2s' }} />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 py-12">
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="text-[#ffd600] hover:text-[#ffd600]/80 hover:bg-[#ffd600]/10"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Retour à l'accueil
+          </Button>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Users className="h-8 w-8 text-[#ffd600]" />
+            <h1 className="text-5xl md:text-7xl font-bold uppercase tracking-wider text-[#ffd600]">
+              SPECTATEUR
+            </h1>
+          </div>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Inscris-toi pour venir supporter et profiter de l'événement
+          </p>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="max-w-2xl mx-auto mb-6">
+          {selectedSlot ? (
+            <div className={cn('rounded-lg border p-6 backdrop-blur-sm', typeStyles[selectedSlot.type].bg, typeStyles[selectedSlot.type].border)}>
+              <div className="flex items-center gap-2 mb-4">
+                <Users className={cn('h-5 w-5', typeStyles[selectedSlot.type].text)} />
+                <h2 className="text-xl font-semibold text-foreground">Créneau sélectionné</h2>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">{selectedSlot.date}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">{selectedSlot.time}</span>
+                </div>
+                <div className={cn('inline-block rounded-full px-3 py-1 text-sm font-bold uppercase', typeStyles[selectedSlot.type].text, typeStyles[selectedSlot.type].bg)}>
+                  {selectedSlot.title}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-6 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <Calendar className="h-5 w-5 text-orange-400 mt-0.5" />
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Aucun créneau sélectionné</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Retourne au planning pour sélectionner une date.
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/#planning')}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                  >
+                    Choisir un créneau
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="max-w-2xl mx-auto">
+          <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">
+            <RegistrationSpectateurForm />
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="max-w-2xl mx-auto mt-8 text-center">
+          <p className="text-sm text-muted-foreground">
+            Inscription gratuite • Aucun paiement requis
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default RegistrationSpectateur;
