@@ -10,6 +10,7 @@ import RegistrationSpectateur from "./pages/RegistrationSpectateur";
 import Confirmation from "./pages/Confirmation";
 import ConfirmationSpectateur from "./pages/ConfirmationSpectateur";
 import Admin from "./pages/Admin";
+import AdminSpectateurs from "./pages/AdminSpectateurs";
 import AdminStock from "./pages/AdminStock";
 import TestRegistration from "./pages/TestRegistration";
 import NotFound from "./pages/NotFound";
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/confirmation" element={<Confirmation />} />
             <Route path="/confirmation-spectateur" element={<ConfirmationSpectateur />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin-spectateurs" element={<AdminSpectateurs />} />
             <Route path="/admin-stock" element={<AdminStock />} />
             <Route path="/test" element={<TestRegistration />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

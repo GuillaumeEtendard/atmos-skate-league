@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { Trophy, Users } from 'lucide-react';
 
@@ -238,10 +238,10 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
                 <DialogTitle className="text-center text-xl font-bold uppercase tracking-wider text-racing-yellow">
                   Mode d'inscription
                 </DialogTitle>
+                <DialogDescription className="text-center text-sm text-muted-foreground">
+                  {date} · {time}
+                </DialogDescription>
               </DialogHeader>
-              <p className="text-center text-sm text-muted-foreground mb-2">
-                {date} · {time}
-              </p>
               <div className="flex flex-col gap-3 mt-2">
                 <button
                   onClick={handleChallenger}

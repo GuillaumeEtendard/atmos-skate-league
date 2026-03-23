@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 
 const STORAGE_KEY = 'admin_password';
@@ -204,6 +205,14 @@ const Admin = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  onClick={() => navigate('/admin-spectateurs')}
+                >
+                  <Users className="h-4 w-4" />
+                  Spectateurs
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => navigate('/admin-stock')}
                 >
                   <Package className="h-4 w-4" />
@@ -312,6 +321,7 @@ const Admin = () => {
               <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Détails du participant</DialogTitle>
+                  <DialogDescription className="sr-only">Informations complètes du participant inscrit</DialogDescription>
                 </DialogHeader>
                 {selectedParticipant && (
                   <div className="grid gap-3 text-sm">
