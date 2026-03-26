@@ -23,6 +23,7 @@ interface Participant {
   event_id: string | null;
   jersey: string | null;
   jersey_size: string | null;
+  age_category?: string | null;
   status: string;
   registered_at: string;
   amount: number;
@@ -258,7 +259,20 @@ const Admin = () => {
                     <section key={eventId} className="border border-border rounded-lg overflow-hidden bg-card">
                       <div className="px-4 py-3 bg-muted/50 border-b border-border flex items-center justify-between">
                         <h2 className="font-semibold text-lg">{label}</h2>
-                        <span className="text-sm text-muted-foreground">{list.length} participant{list.length !== 1 ? 's' : ''}</span>
+                        <div className="flex items-center gap-3 text-sm">
+                          {list.length > 0 && (() => {
+                            const payants = list.filter((p) => p.payment_status === 'succeeded').length;
+                            const gratuits = list.filter((p) => p.payment_status === 'free').length;
+                            return (
+                              <>
+                                {payants > 0 && <span className="text-green-400">{payants} payant{payants !== 1 ? 's' : ''}</span>}
+                                {gratuits > 0 && <span className="text-blue-400">{gratuits} gratuit{gratuits !== 1 ? 's' : ''}</span>}
+                                <span className="text-muted-foreground">{list.length} total</span>
+                              </>
+                            );
+                          })()}
+                          {list.length === 0 && <span className="text-muted-foreground">0 participant</span>}
+                        </div>
                       </div>
                       <div className="overflow-x-auto">
                         {list.length === 0 ? (
@@ -272,18 +286,20 @@ const Admin = () => {
                                 <th className="text-left p-3 font-medium hidden md:table-cell">Téléphone</th>
                                 <th className="text-left p-3 font-medium">Maillot</th>
                                 <th className="text-left p-3 font-medium">Inscription</th>
-                                <th className="text-right p-3 font-medium">Montant</th>
+                                <th className="text-right p-3 font-medium">Paiement</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {list.map((p) => (
+                              {list.map((p) => {
+                                const isFree = p.payment_status === 'free';
+                                return (
                                 <tr
                                   key={p.id}
                                   role="button"
                                   tabIndex={0}
                                   onClick={() => setSelectedParticipant(p)}
                                   onKeyDown={(e) => e.key === 'Enter' && setSelectedParticipant(p)}
-                                  className="border-b border-border/50 hover:bg-muted/30 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset"
+                                  className={`border-b border-border/50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset ${isFree ? 'bg-blue-950/20 hover:bg-blue-950/30' : 'hover:bg-muted/30'}`}
                                 >
                                   <td className="p-3 font-medium">{p.name}</td>
                                   <td className="p-3 hidden sm:table-cell">{p.email}</td>
@@ -304,9 +320,20 @@ const Admin = () => {
                                         })
                                       : '–'}
                                   </td>
-                                  <td className="p-3 text-right">{p.amount != null ? `${p.amount} €` : '–'}</td>
+                                  <td className="p-3 text-right">
+                                    {isFree ? (
+                                      <span className="inline-flex items-center rounded-full bg-blue-500/15 px-2 py-0.5 text-xs font-semibold text-blue-400 border border-blue-500/30">
+                                        Gratuit
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center rounded-full bg-green-500/15 px-2 py-0.5 text-xs font-semibold text-green-400 border border-green-500/30">
+                                        {p.amount != null ? `${p.amount} €` : 'Payé'}
+                                      </span>
+                                    )}
+                                  </td>
                                 </tr>
-                              ))}
+                                );
+                              })}
                             </tbody>
                           </table>
                         )}
@@ -331,11 +358,18 @@ const Admin = () => {
                     <DetailRow label="Créneau" value={eventLabels[selectedParticipant.event_id ?? '__sans_creneau__'] ?? selectedParticipant.event_id ?? 'Non assigné'} />
                     <DetailRow label="Maillot (modèle)" value={selectedParticipant.jersey ?? '–'} />
                     <DetailRow label="Taille maillot" value={selectedParticipant.jersey_size ?? '–'} />
+                    <DetailRow label="Tranche d'âge" value={selectedParticipant.age_category ?? '–'} />
                     <DetailRow label="Statut" value={selectedParticipant.status} />
                     <DetailRow label="Inscription" value={formatDate(selectedParticipant.registered_at)} />
-                    <DetailRow label="Montant" value={selectedParticipant.amount != null ? `${selectedParticipant.amount} €` : '–'} />
-                    <DetailRow label="Statut paiement" value={selectedParticipant.payment_status ?? '–'} />
-                    <DetailRow label="Payment Intent (Stripe)" value={selectedParticipant.payment_intent_id ?? '–'} />
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-muted-foreground font-medium">Type d'inscription</span>
+                      {selectedParticipant.payment_status === 'free' ? (
+                        <span className="inline-flex w-fit items-center rounded-full bg-blue-500/15 px-2 py-0.5 text-xs font-semibold text-blue-400 border border-blue-500/30">Gratuit (sans paiement)</span>
+                      ) : (
+                        <span className="inline-flex w-fit items-center rounded-full bg-green-500/15 px-2 py-0.5 text-xs font-semibold text-green-400 border border-green-500/30">Payant – {selectedParticipant.amount != null ? `${selectedParticipant.amount} €` : 'montant inconnu'}</span>
+                      )}
+                    </div>
+                    <DetailRow label="Payment Intent (Stripe)" value={selectedParticipant.payment_status === 'free' ? '–' : (selectedParticipant.payment_intent_id ?? '–')} />
                     <DetailRow label="Email de confirmation envoyé" value={selectedParticipant.confirmation_email_sent ? 'Oui' : 'Non'} />
                     <DetailRow label="Date envoi confirmation" value={formatDate(selectedParticipant.confirmation_email_sent_at)} />
                     <DetailRow label="Créé le" value={formatDate(selectedParticipant.created_at)} />

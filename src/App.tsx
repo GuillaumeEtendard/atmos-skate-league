@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import AdminSpectateurs from "./pages/AdminSpectateurs";
 import AdminStock from "./pages/AdminStock";
 import TestRegistration from "./pages/TestRegistration";
+import InscriptionLibre from "./pages/InscriptionLibre";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/admin-spectateurs" element={<AdminSpectateurs />} />
             <Route path="/admin-stock" element={<AdminStock />} />
             <Route path="/test" element={<TestRegistration />} />
+            <Route path="/inscription-libre/:eventId" element={<InscriptionLibre />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
