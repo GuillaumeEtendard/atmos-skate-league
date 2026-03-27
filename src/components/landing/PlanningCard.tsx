@@ -203,27 +203,25 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             {time}
           </div>
 
-          {/* Spots Remaining — masqué si l'événement est passé */}
-          {!isPast && (
-            <div className={cn('text-center', compact ? 'mb-2' : 'mb-4')}>
-              <span className={cn(
-                'font-medium',
-                compact ? 'text-[10px]' : 'text-sm',
-                spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground'
-              )}>
-                Places restantes {spotsRemaining}/{totalSpots}
-              </span>
-            </div>
-          )}
+          {/* Spots Remaining — invisible si l'événement est passé (garde la hauteur) */}
+          <div className={cn('text-center', compact ? 'mb-2' : 'mb-4', isPast && 'invisible')}>
+            <span className={cn(
+              'font-medium',
+              compact ? 'text-[10px]' : 'text-sm',
+              spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground'
+            )}>
+              Places restantes {spotsRemaining}/{totalSpots}
+            </span>
+          </div>
 
           {/* CTA */}
           {isPast ? (
-            <p className={cn(
-              'text-center font-medium text-muted-foreground',
-              compact ? 'text-[10px]' : 'text-sm'
+            <div className={cn(
+              'relative z-20 flex w-full items-center justify-center rounded-md border border-border/40 bg-muted/20 text-muted-foreground',
+              compact ? 'h-8 text-[10px]' : 'h-9 text-sm'
             )}>
               Événement passé
-            </p>
+            </div>
           ) : (
             <Button
               variant="outline"
@@ -240,7 +238,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
               {comingSoon
                 ? 'COMING SOON'
                 : spotsRemaining === 0
-                  ? <span className="text-red-500">INSCRIPTION SPECTATEUR →</span>
+                  ? 'INSCRIPTION SPECTATEUR →'
                   : 'INSCRIPTION'}
             </Button>
           )}
