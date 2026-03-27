@@ -225,11 +225,15 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
               compact && 'h-8 text-xs',
               comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow'
             )}
-            disabled={spotsRemaining === 0 || comingSoon}
+            disabled={comingSoon}
             onClick={handleRegistration}
             onMouseEnter={handleMouseLeave}
           >
-            {comingSoon ? 'COMING SOON' : spotsRemaining === 0 ? <span className="text-red-500">SOLD OUT</span> : 'INSCRIPTION'}
+            {comingSoon
+              ? 'COMING SOON'
+              : spotsRemaining === 0
+                ? <span className="text-red-500">INSCRIPTION SPECTATEUR →</span>
+                : 'INSCRIPTION'}
           </Button>
 
           <Dialog open={showPopup} onOpenChange={setShowPopup}>
@@ -243,18 +247,34 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-3 mt-2">
-                <button
-                  onClick={handleChallenger}
-                  className="group flex items-center gap-4 rounded-lg border border-racing-yellow/30 bg-racing-yellow/5 p-4 text-left transition-all hover:border-racing-yellow hover:bg-racing-yellow/10"
+                <div
+                  className={cn(
+                    'flex items-center gap-4 rounded-lg border p-4 text-left transition-all',
+                    spotsRemaining === 0
+                      ? 'cursor-not-allowed border-border/30 bg-muted/20 opacity-50'
+                      : 'group cursor-pointer border-racing-yellow/30 bg-racing-yellow/5 hover:border-racing-yellow hover:bg-racing-yellow/10'
+                  )}
+                  onClick={spotsRemaining > 0 ? handleChallenger : undefined}
+                  role={spotsRemaining > 0 ? 'button' : undefined}
+                  tabIndex={spotsRemaining > 0 ? 0 : undefined}
+                  onKeyDown={spotsRemaining > 0 ? (e) => e.key === 'Enter' && handleChallenger() : undefined}
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-racing-yellow/20 text-racing-yellow group-hover:bg-racing-yellow/30">
+                  <div className={cn(
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
+                    spotsRemaining === 0 ? 'bg-muted text-muted-foreground' : 'bg-racing-yellow/20 text-racing-yellow'
+                  )}>
                     <Trophy className="h-5 w-5" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="font-semibold text-foreground">S'inscrire en challenger</p>
-                    <p className="text-xs text-muted-foreground">Participe à la compétition (35€)</p>
+                    <p className="text-xs text-muted-foreground">
+                      {spotsRemaining === 0 ? 'Complet — plus de places disponibles' : 'Participe à la compétition (35€)'}
+                    </p>
                   </div>
-                </button>
+                  {spotsRemaining === 0 && (
+                    <span className="shrink-0 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-red-400 border border-red-500/30">Complet</span>
+                  )}
+                </div>
                 <button
                   onClick={handleSpectateur}
                   className="group flex items-center gap-4 rounded-lg border border-border bg-card/50 p-4 text-left transition-all hover:border-foreground/30 hover:bg-card"
