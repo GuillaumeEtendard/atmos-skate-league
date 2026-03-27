@@ -15,6 +15,7 @@ interface PlanningCardProps {
   spotsRemaining: number;
   totalSpots: number;
   comingSoon?: boolean;
+  isPast?: boolean;
   /** Mode compact pour la grille mobile (3 cartes par ligne). */
   compact?: boolean;
   /** Logo partenaire affiché à côté du logo type (ex. deeps). */
@@ -59,7 +60,7 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, compact = false, partnerLogo }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, isPast = false, compact = false, partnerLogo }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -113,7 +114,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
       className={cn(
         'card-3d group relative overflow-visible',
         compact ? 'min-w-0 w-full' : 'min-w-[260px] md:min-w-0',
-        spotsRemaining === 0 && 'opacity-60'
+        isPast && 'opacity-50'
       )}
       style={{ perspective: '1000px' }}
     >
@@ -202,39 +203,47 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             {time}
           </div>
 
-          {/* Spots Remaining */}
-          <div className={cn(
-            'text-center',
-            compact ? 'mb-2' : 'mb-4'
-          )}>
-            <span className={cn(
-              'font-medium',
-              compact ? 'text-[10px]' : 'text-sm',
-              spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground'
-            )}>
-              Places restantes {spotsRemaining}/{totalSpots}
-            </span>
-          </div>
+          {/* Spots Remaining — masqué si l'événement est passé */}
+          {!isPast && (
+            <div className={cn('text-center', compact ? 'mb-2' : 'mb-4')}>
+              <span className={cn(
+                'font-medium',
+                compact ? 'text-[10px]' : 'text-sm',
+                spotsRemaining === 0 ? 'text-red-500' : 'text-muted-foreground'
+              )}>
+                Places restantes {spotsRemaining}/{totalSpots}
+              </span>
+            </div>
+          )}
 
-          {/* CTA - onMouseEnter annule le tilt pour que le clic soit fiable sur desktop */}
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(
-              'relative z-20 w-full border-racing-yellow/50',
-              compact && 'h-8 text-xs',
-              comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow'
-            )}
-            disabled={comingSoon}
-            onClick={handleRegistration}
-            onMouseEnter={handleMouseLeave}
-          >
-            {comingSoon
-              ? 'COMING SOON'
-              : spotsRemaining === 0
-                ? <span className="text-red-500">INSCRIPTION SPECTATEUR →</span>
-                : 'INSCRIPTION'}
-          </Button>
+          {/* CTA */}
+          {isPast ? (
+            <p className={cn(
+              'text-center font-medium text-muted-foreground',
+              compact ? 'text-[10px]' : 'text-sm'
+            )}>
+              Événement passé
+            </p>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                'relative z-20 w-full border-racing-yellow/50',
+                compact && 'h-8 text-xs',
+                comingSoon ? 'cursor-not-allowed opacity-70 text-muted-foreground' : 'cursor-pointer text-racing-yellow hover:bg-racing-yellow'
+              )}
+              disabled={comingSoon}
+              onClick={handleRegistration}
+              onMouseEnter={handleMouseLeave}
+            >
+              {comingSoon
+                ? 'COMING SOON'
+                : spotsRemaining === 0
+                  ? <span className="text-red-500">INSCRIPTION SPECTATEUR →</span>
+                  : 'INSCRIPTION'}
+            </Button>
+          )}
 
           <Dialog open={showPopup} onOpenChange={setShowPopup}>
             <DialogContent className="max-w-sm border-racing-yellow/30 bg-background">

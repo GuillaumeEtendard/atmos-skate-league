@@ -11,6 +11,24 @@ const MAX_SPOTS_REMAINING_DISPLAYED: Record<string, number> = {
   'electric-9-mai': 18,
 };
 
+const MONTH_MAP: Record<string, number> = {
+  JANVIER: 1, FÉVRIER: 2, MARS: 3, AVRIL: 4, MAI: 5, JUIN: 6,
+  JUILLET: 7, AOÛT: 8, SEPTEMBRE: 9, OCTOBRE: 10, NOVEMBRE: 11, DÉCEMBRE: 12,
+};
+
+/** Retourne true si la date de l'événement est passée (format "DIMANCHE 15 MARS"). */
+function isEventPast(dateStr: string): boolean {
+  const parts = dateStr.trim().split(/\s+/);
+  // parts = ['DIMANCHE', '15', 'MARS']
+  const day = parseInt(parts[1], 10);
+  const month = MONTH_MAP[parts[2]];
+  if (!day || !month) return false;
+  const year = new Date().getFullYear();
+  // L'événement est passé si la journée entière est terminée
+  const endOfEventDay = new Date(year, month - 1, day, 23, 59, 59);
+  return new Date() > endOfEventDay;
+}
+
 const PlanningSection = () => {
   const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
 
@@ -32,6 +50,7 @@ const PlanningSection = () => {
     return {
       ...event,
       spotsRemaining,
+      isPast: isEventPast(event.date),
     };
   });
 
