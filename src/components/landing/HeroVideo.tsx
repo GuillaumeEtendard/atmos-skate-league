@@ -21,12 +21,13 @@ const HeroVideo = () => {
       {/* Video Background */}
       <div className="absolute inset-0">
         <video ref={videoRef} autoPlay loop muted playsInline className="h-full w-full object-cover">
+          <source src="/videos/compressed/hero-background-0426.webm" type="video/webm" />
           <source src="/videos/compressed/hero-background-0426.mp4" type="video/mp4" />
         </video>
       </div>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/70" />
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Noise Texture */}
       <div className="texture-overlay absolute inset-0" />
