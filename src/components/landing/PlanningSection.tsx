@@ -6,9 +6,9 @@ import { EVENTS } from '@/data/events';
 /** Plafond "places restantes" affiché : on affiche au plus ce nombre ; s'il en reste moins (plus d'inscrits), on affiche le nombre réel. */
 const MAX_SPOTS_REMAINING_DISPLAYED: Record<string, number> = {
   'king-15-mars': 10,
-  'electric-9-mai': 7,
+  'king-9-mai': 7,
   'queen-28-mars': 15,
-  'mixte-24-mai': 18,
+  'electric-24-mai': 18,
 };
 
 const MONTH_MAP: Record<string, number> = {
