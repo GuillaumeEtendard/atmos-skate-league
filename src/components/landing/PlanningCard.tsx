@@ -122,7 +122,9 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
       {/* Logo type (et logo partenaire si présent) en haut à droite, débordant */}
       <div
         className={cn(
-          'absolute -top-10 -right-2 z-20 pointer-events-none flex items-end',
+          'absolute z-20 pointer-events-none flex items-end',
+          type === 'electric' ? '-top-10' : '-top-2',
+          '-right-2',
           partnerLogo ? 'flex-col gap-0.5 md:flex-row md:gap-1' : '',
           compact && '-top-1 -right-1'
         )}
