@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { cn } from '@/lib/utils';
-import { getEventById } from '@/data/events';
+import { getEventById, getEventPriceCents } from '@/data/events';
 
 // Chargez votre clé publique Stripe
 // IMPORTANT: Remplacez cette valeur par votre clé publique Stripe
@@ -75,11 +75,13 @@ const Registration = () => {
 
   useEffect(() => {
     if (isDev) return;
+    const eventType = selectedSlot ? getEventById(selectedSlot.id)?.type : undefined;
+    const amount = eventType ? getEventPriceCents(eventType) : getEventPriceCents('king');
     // Créer un PaymentIntent dès que la page se charge
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: 3500 }), // 35€ en centimes
+      body: JSON.stringify({ amount }),
     })
       .then((res) => {
         if (!res.ok) {
@@ -93,7 +95,7 @@ const Registration = () => {
       .catch((error) => {
         console.error('Error creating payment intent:', error);
       });
-  }, []);
+  }, [selectedSlot]);
 
   const appearance = {
     theme: 'night' as const,

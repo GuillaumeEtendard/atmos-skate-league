@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { Trophy, Users } from 'lucide-react';
+import { getEventPriceLabel } from '@/data/events';
 
 interface PlanningCardProps {
   id: string;
@@ -275,11 +276,22 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
                   <div className="flex-1">
                     <p className="font-semibold text-foreground">S'inscrire en challenger</p>
                     <p className="text-xs text-muted-foreground">
-                      {spotsRemaining === 0 ? 'Complet — plus de places disponibles' : 'Participe à la compétition (35€)'}
+                      {spotsRemaining === 0 ? 'Complet — plus de places disponibles' : (
+                        <>
+                          Participe à la compétition{' '}
+                          {type === 'queen' ? (
+                            <><span className="line-through opacity-60">35€</span> <span className="text-racing-yellow font-semibold">20€</span></>
+                          ) : (
+                            <span className="text-racing-yellow font-semibold">{getEventPriceLabel(type)}</span>
+                          )}
+                        </>
+                      )}
                     </p>
                   </div>
-                  {spotsRemaining === 0 && (
+                  {spotsRemaining === 0 ? (
                     <span className="shrink-0 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-red-400 border border-red-500/30">Complet</span>
+                  ) : type === 'queen' && (
+                    <span className="shrink-0 rounded-full bg-purple-500/20 px-2 py-0.5 text-[10px] font-bold uppercase text-purple-300 border border-purple-500/40">Promo</span>
                   )}
                 </div>
                 <button

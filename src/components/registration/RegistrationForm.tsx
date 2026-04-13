@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useEventSlot } from '@/contexts/EventSlotContext';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { getEventById } from '@/data/events';
+import { getEventById, getEventPriceLabel } from '@/data/events';
 import { cn } from '@/lib/utils';
 
 const JERSEY_OPTIONS = [
@@ -287,7 +287,14 @@ const RegistrationForm = () => {
       <div className="border-t border-border pt-4">
         <div className="flex justify-between items-center mb-4">
           <span className="text-lg font-semibold">Total à payer</span>
-          <span className="text-2xl font-bold text-[#ffd600]">35,00 €</span>
+          {event?.type === 'queen' ? (
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg line-through text-muted-foreground">35€</span>
+              <span className="text-2xl font-bold text-[#ffd600]">20€</span>
+            </div>
+          ) : (
+            <span className="text-2xl font-bold text-[#ffd600]">{event ? getEventPriceLabel(event.type) : '35€'}</span>
+          )}
         </div>
       </div>
 

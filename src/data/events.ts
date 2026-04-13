@@ -25,3 +25,13 @@ export const EVENTS: EventItem[] = [
 export function getEventById(eventId: string): EventItem | undefined {
   return EVENTS.find((e) => e.id === eventId);
 }
+
+/** Retourne le prix en centimes selon le type de course. */
+export function getEventPriceCents(type: EventType): number {
+  return type === 'queen' ? 2000 : 3500;
+}
+
+/** Retourne le prix formaté selon le type de course. */
+export function getEventPriceLabel(type: EventType): string {
+  return type === 'queen' ? '20€' : '35€';
+}
