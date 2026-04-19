@@ -313,7 +313,7 @@ const InscriptionLibre = () => {
                       Inscription en cours...
                     </>
                   ) : (
-                    "Inscrire le participant"
+                    "S'inscrire"
                   )}
                 </Button>
               </form>
