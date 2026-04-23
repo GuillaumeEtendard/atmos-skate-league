@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Clock, Trophy, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Trophy, CheckCircle2, AlertTriangle, Loader2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -173,7 +173,18 @@ const InscriptionLibre = () => {
         {/* Formulaire ou succès */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="max-w-2xl mx-auto">
           <div className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-8">
-            {isSuccess ? (
+            {event?.canceled ? (
+              <div className="text-center py-8">
+                <XCircle className="h-16 w-16 mx-auto text-gray-500 mb-4" />
+                <h2 className="text-3xl font-bold text-gray-400 mb-2">Événement annulé</h2>
+                <p className="text-muted-foreground mb-6">
+                  Cet événement a été annulé. Les inscriptions ne sont plus disponibles.
+                </p>
+                <Button variant="outline" onClick={() => navigate('/')}>
+                  Retour à l'accueil
+                </Button>
+              </div>
+            ) : isSuccess ? (
               <div className="text-center py-8">
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
                   <CheckCircle2 className="h-16 w-16 mx-auto text-green-500 mb-4" />

@@ -17,6 +17,7 @@ interface PlanningCardProps {
   totalSpots: number;
   comingSoon?: boolean;
   isPast?: boolean;
+  canceled?: boolean;
   /** Mode compact pour la grille mobile (3 cartes par ligne). */
   compact?: boolean;
   /** Logo partenaire affiché à côté du logo type (ex. deeps). */
@@ -61,7 +62,7 @@ const typeStyles = {
   },
 };
 
-const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, isPast = false, compact = false, partnerLogo }: PlanningCardProps) => {
+const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots, comingSoon = false, isPast = false, canceled = false, compact = false, partnerLogo }: PlanningCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -72,7 +73,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
   const styles = typeStyles[type];
 
   const handleRegistration = () => {
-    if (comingSoon) return;
+    if (comingSoon || canceled) return;
     setSelectedSlot({ id, date, time, title, type });
     setShowPopup(true);
   };
@@ -115,7 +116,7 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
       className={cn(
         'card-3d group relative overflow-visible',
         compact ? 'min-w-0 w-full' : 'min-w-[260px] md:min-w-0',
-        isPast && 'opacity-50'
+        canceled ? 'opacity-50 grayscale' : isPast && 'opacity-50'
       )}
       style={{ perspective: '1000px' }}
     >
@@ -181,12 +182,22 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           {/* Content - z-20 et isolation pour être au-dessus du dégradé dans le contexte 3D */}
         <div className="relative z-20 isolate">
           {/* Type Badge */}
-          <div className={cn(
-            'inline-block rounded-full font-bold uppercase',
-            compact ? 'mb-2 px-2 py-0.5 text-[10px]' : 'mb-4 px-3 py-1 text-xs',
-            styles.badge
-          )}>
-            {title}
+          <div className={cn('flex flex-wrap items-center gap-2', compact ? 'mb-2' : 'mb-4')}>
+            <div className={cn(
+              'inline-block rounded-full font-bold uppercase',
+              compact ? 'px-2 py-0.5 text-[10px]' : 'px-3 py-1 text-xs',
+              styles.badge
+            )}>
+              {title}
+            </div>
+            {canceled && (
+              <div className={cn(
+                'inline-block rounded-full font-bold uppercase bg-gray-500 text-white',
+                compact ? 'px-2 py-0.5 text-[10px]' : 'px-3 py-1 text-xs',
+              )}>
+                ANNULÉ
+              </div>
+            )}
           </div>
 
           {/* Date */}
@@ -218,7 +229,14 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
           </div>
 
           {/* CTA */}
-          {isPast ? (
+          {canceled ? (
+            <div className={cn(
+              'relative z-20 flex w-full items-center justify-center rounded-md border border-border/40 bg-muted/20 text-muted-foreground',
+              compact ? 'h-8 text-[10px]' : 'h-9 text-sm'
+            )}>
+              Événement annulé
+            </div>
+          ) : isPast ? (
             <div className={cn(
               'relative z-20 flex w-full items-center justify-center rounded-md border border-border/40 bg-muted/20 text-muted-foreground',
               compact ? 'h-8 text-[10px]' : 'h-9 text-sm'
