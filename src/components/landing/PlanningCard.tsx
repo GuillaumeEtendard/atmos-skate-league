@@ -190,14 +190,6 @@ const PlanningCard = ({ id, date, time, title, type, spotsRemaining, totalSpots,
             )}>
               {title}
             </div>
-            {canceled && (
-              <div className={cn(
-                'inline-block rounded-full font-bold uppercase bg-gray-500 text-white',
-                compact ? 'px-2 py-0.5 text-[10px]' : 'px-3 py-1 text-xs',
-              )}>
-                ANNULÉ
-              </div>
-            )}
           </div>
 
           {/* Date */}
