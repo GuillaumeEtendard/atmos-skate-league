@@ -65,6 +65,7 @@ const Index = () => {
         <EventExplanation />
         <InstagramReelSlider />
         <LocationSection />
+        <ReplaySection />
         <PlanningSection />
         <EntryFeesSection />
         {false && <HighlightsSection />}
@@ -72,7 +73,6 @@ const Index = () => {
         <TeamSection />
         <SloganCTA />
         <RankingSection />
-        <ReplaySection />
         {false && <InstagramCarousel />}
         {false && <CommunitySection />}
         
