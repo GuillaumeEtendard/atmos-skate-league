@@ -2,7 +2,7 @@ import SectionTitle from './SectionTitle';
 
 const ReplaySection = () => {
   return (
-    <section className="section-container texture-overlay relative overflow-hidden py-20 md:py-28">
+    <section className="section-container texture-overlay relative overflow-hidden">
       <div className="relative z-10 mx-auto max-w-5xl">
         <SectionTitle>REPLAY</SectionTitle>
 
