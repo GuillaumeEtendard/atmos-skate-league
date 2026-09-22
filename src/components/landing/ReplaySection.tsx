@@ -10,8 +10,8 @@ const ReplaySection = () => {
         <div className="relative aspect-video w-full overflow-hidden rounded-2xl border-2 border-border bg-card/50 backdrop-blur-sm transition-all hover:border-[#ffd600]/50 hover:shadow-[0_0_40px_-10px_#ffd600]">
           <iframe
             className="absolute inset-0 h-full w-full"
-            src="https://www.youtube.com/embed/i8OJcuKZRzg"
-            title="24h du Mans Rollers Electriques #EP2"
+            src="https://www.youtube.com/embed/BbV4DZQUkuw"
+            title="ATMOS SKATE LEAGUE 🛼🏁 EP1 #KOTR"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
